@@ -92,6 +92,7 @@
     tr:nth-child(even) td { background: var(--bg); }
     .tag { display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
     .tag.no { background: #FEE2E2; color: var(--red); }
+    .tag.min { background: #FEF3C7; color: var(--amber); }
 
     .box { border-radius: 12px; padding: 18px 22px; margin: 18px 0; font-size: 15px; color: var(--muted); }
     .box.green  { background: #F0FDF4; border-left: 4px solid var(--green); }
@@ -149,7 +150,7 @@
 <header class="doc-hero">
   <h1>Privacy Policy</h1>
   <p>Privacy should be simple and honest. This explains exactly what we collect, what we don't, and how your data stays yours.</p>
-  <span class="updated">Last updated: October 29, 2026</span>
+  <span class="updated">Last updated: November 5, 2026</span>
 </header>
 
 <div class="container">
@@ -159,6 +160,8 @@
     <div class="summary-grid">
       <div class="summary-item good">Your shift data stays on your device — we never see it</div>
       <div class="summary-item good">Your Employee ID is never stored by us or sent to our servers</div>
+      <div class="summary-item good">We store one code made from your AtoZ account, only to run your trial and pass</div>
+      <div class="summary-item good">Payments are handled by Stripe. We never see your card number</div>
       <div class="summary-item good">We do not sell or share your data</div>
       <div class="summary-item good">We do not use tracking cookies or analytics</div>
       <div class="summary-item bad">We do not collect your browsing history</div>
@@ -170,7 +173,7 @@
 
   <section id="who-we-are">
     <h2><span class="num">1</span> Who We Are</h2>
-    <p>Qwicktry ("we", "us", "our") is the developer and operator of the <strong>AtoZ Shift Helper</strong> Chrome browser extension and the qwicktry.com website. We are a software tools business registered in Canada.</p>
+    <p>QWICKTRY ("Qwicktry", "we", "us", "our") is the developer and operator of the <strong>AtoZ Shift Helper</strong> Chrome browser extension and the qwicktry.com website. We are a software tools business registered in Ontario, Canada.</p>
     <p>
       <strong>Contact:</strong> support&#64;qwicktry.com<br>
       <strong>Website:</strong> https://qwicktry.com<br>
@@ -192,6 +195,8 @@
         <tr><td>Your profile label (optional name/note)</td><td>Displayed on the floating status panel</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Activity log</td><td>Local record of the shifts (VET) and time off (VTO) it tried to claim for you</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Department names</td><td>Found on your AtoZ pages, to build the Departments list you pick from</td><td><span class="tag no">Never</span></td></tr>
+        <tr><td>Your pass (licence) key</td><td>Checked on your own device to unlock the extension after your free trial</td><td><span class="tag no">Never</span></td></tr>
+        <tr><td>Your trial end date</td><td>A copy kept so the popup can show when your trial ends</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Your answer to the review question (version 3.4.5 and later)</td><td>So it only asks once or twice, then stops</td><td><span class="tag no">Never</span></td></tr>
       </tbody>
     </table>
@@ -213,10 +218,24 @@
     </div>
 
     <h3>2.3 Our Servers</h3>
-    <p>AtoZ Shift Helper does <strong>not</strong> communicate with any Qwicktry server. We do not operate a backend, database, or verification service for this extension. No data is ever sent to us.</p>
+    <p>The extension contacts one server of ours, and only for licensing — never for shift data.</p>
+    <table>
+      <thead><tr><th>Data</th><th>Purpose</th><th>Stored by us?</th></tr></thead>
+      <tbody>
+        <tr><td>Your request code</td><td>Starts and checks your free trial, and identifies which pass is yours</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>The date your free trial started</td><td>So your trial lasts the same length no matter which computer you use</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>Your pass details (which pass, its end date, and the pass key we issued)</td><td>So a pass you buy can switch on by itself, and be sent again if you need it</td><td><span class="tag min">Yes</span></td></tr>
+      </tbody>
+    </table>
+    <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it when it checks for a new pass, right after you buy or when your trial or pass ends.</p>
+    <p>Our licensing server runs on Cloudflare. As with any website, Cloudflare sees your IP address when the extension connects; our licensing records don't include it.</p>
     <div class="box green">
-      <strong>We store nothing about you</strong>
-      Qwicktry holds no database records for extension users. We have no server that receives data from the extension. Everything runs locally on your device.
+      <strong>Once you have a pass, it's checked on your own device</strong>
+      A pass key is verified on your device using cryptography — it is never sent to us. While your pass is active, the only thing the extension fetches from us is our list of cancelled passes, when you press Start and about every six hours while it runs. That download sends nothing about you.
+    </div>
+    <div class="box blue">
+      <strong>What we never receive</strong>
+      Your Employee ID, your schedule, which shifts you claimed, your filter settings, your card number, or anything about other websites you visit. None of it is sent to us — during your trial or afterwards. If you buy a pass, we receive only the purchase details listed in section 2.7.
     </div>
 
     <h3>2.4 This Website</h3>
@@ -228,12 +247,29 @@
 
     <h3>2.6 Feedback Form When You Remove the Extension</h3>
     <p>From version 3.4.5, when you remove the extension, Chrome opens a short feedback form hosted on Google Forms. Answering is optional. The extension itself sends nothing — the form's link only carries the extension's version number. If you submit the form, we receive your answers and that version number. We don't receive your email address unless you choose to type it in. Google's own privacy policy applies to the form page.</p>
+
+    <h3 id="payments">2.7 When You Buy a Pass</h3>
+    <p>You pay on a secure checkout page hosted by Stripe. Passes are sold through <strong>Link</strong>, Stripe's checkout and reseller service, which acts as the merchant of record. Link and Stripe collect your name, payment details, email address and billing location (needed to work out sales tax), along with information used to prevent fraud, and handle them under their own privacy policies (<a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a> and <a href="https://link.com/privacy" target="_blank" rel="noopener">link.com/privacy</a>). We never receive your full card number.</p>
+    <table>
+      <thead><tr><th>What we receive from Stripe</th><th>Why</th><th>Stored by us?</th></tr></thead>
+      <tbody>
+        <tr><td>Your name and email address</td><td>To answer questions about your purchase and to handle refunds</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>The pass you bought, the price, the tax charged and the date</td><td>To deliver your pass and keep the business records the law requires</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>Your country (and postal code where tax needs it)</td><td>Tax records</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>Your request code</td><td>To match the purchase to your pass</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>Your card number, CVC or bank login</td><td>—</td><td><span class="tag no">Never</span></td></tr>
+      </tbody>
+    </table>
+    <p>We use your email address only for your purchase: refunds, delivery problems and questions about your pass. If you ask us to, we also send a reminder shortly before your pass ends, and every reminder has a one-click unsubscribe link. We never use your email for advertising and never sell it.</p>
+    <p>We also keep a record of refunds and disputed payments against your request code. We use it only to prevent refund abuse, as described in our Terms (section 3.9).</p>
   </section>
 
   <section id="how-we-use">
     <h2><span class="num">3</span> How We Use Your Information</h2>
-    <p>Because the extension stores everything locally and sends nothing to Qwicktry, we have no user data to use. The only information we may hold is:</p>
+    <p>Apart from the licensing records in section 2.3, the extension stores everything locally and sends nothing to Qwicktry. The only information we may hold is:</p>
     <ul>
+      <li><strong>Licensing records:</strong> Your request code, trial start date and pass details — used only to run your free trial and deliver your pass</li>
+      <li><strong>Purchase records:</strong> The details in section 2.7 — used to deliver your pass, answer questions about it, issue refunds and keep the records tax law requires</li>
       <li><strong>Support emails:</strong> Used solely to respond to your inquiry — never shared or used for any other purpose</li>
       <li><strong>Uninstall feedback (optional):</strong> Used only to understand why people remove the extension and to improve it</li>
     </ul>
@@ -243,9 +279,10 @@
   <section id="how-we-protect">
     <h2><span class="num">4</span> How We Protect Your Information</h2>
     <ul>
-      <li><strong>Local storage only:</strong> Your preferences are stored in Chrome's local extension storage — inaccessible to any website or third party, never transmitted to us</li>
-      <li><strong>HTTPS for Amazon communication:</strong> All communication between the extension and Amazon's AtoZ platform uses HTTPS encryption (TLS)</li>
-      <li><strong>No Qwicktry backend:</strong> We have no server receiving your data, so there is no Qwicktry server to compromise</li>
+      <li><strong>Local storage only:</strong> Your preferences and pass key are stored in Chrome's local extension storage — inaccessible to any website or third party, never transmitted to us</li>
+      <li><strong>HTTPS everywhere:</strong> All communication — with Amazon's AtoZ platform and with our licensing server — uses HTTPS encryption (TLS)</li>
+      <li><strong>Little to compromise:</strong> Our licensing server holds only request codes, trial start dates and pass details — no names, Employee IDs, schedules or shift data</li>
+      <li><strong>Card data stays with Stripe:</strong> Payments are entered on Stripe's checkout, which is certified to PCI DSS Level 1. Card numbers never reach us</li>
       <li><strong>Minimal data:</strong> The extension only stores what is strictly necessary for it to function</li>
     </ul>
     <p>Data stored locally on your device is entirely under your control. You can delete it at any time by clearing the extension's storage or uninstalling the extension.</p>
@@ -254,10 +291,10 @@
   <section id="sharing">
     <h2><span class="num">5</span> Do We Share Your Information?</h2>
     <p><strong>We do not sell your personal information. We do not share your personal information with advertisers, data brokers, or marketing companies.</strong></p>
-    <p>Because the extension does not send any data to Qwicktry, there is nothing we could share. The only third-party communication is between the extension and Amazon's own AtoZ platform — the same platform you use directly as an employee.</p>
+    <p>Apart from the licensing records in section 2.3, the extension sends nothing to Qwicktry, so there is very little we could share. Our licensing server is hosted by Cloudflare, which handles those requests on our behalf. If you buy a pass, Stripe and Link process the payment as described in section 2.7. Otherwise, the only third-party communication is between the extension and Amazon's own AtoZ platform — the same platform you use directly as an employee.</p>
     <div class="box blue">
       <strong>Legal disclosure</strong>
-      We may disclose information if required by law, court order, or governmental authority, or if we believe in good faith that such disclosure is necessary to protect our rights, investigate fraud, or respond to a government request. In practice, since we hold no user data from the extension, this would apply only to support emails or feedback form answers you have sent us.
+      We may disclose information if required by law, court order, or governmental authority, or if we believe in good faith that such disclosure is necessary to protect our rights, investigate fraud, or respond to a government request. In practice, this would apply only to our licensing records, and any support emails or feedback form answers you have sent us.
     </div>
   </section>
 
@@ -273,10 +310,11 @@
     <p>We honour these rights for all users regardless of where you live:</p>
 
     <h3>Right to Access</h3>
-    <p>You can request a copy of any information we hold about you. Since the extension stores everything locally and sends nothing to us, the only data we may hold is any support email correspondence you have had with us, or feedback form answers you chose to send.</p>
+    <p>You can request a copy of any information we hold about you. The only data we may hold is your licensing record (request code, trial start date and any pass you bought), your purchase records (section 2.7), and any support email correspondence you have had with us, or feedback form answers you chose to send.</p>
 
     <h3>Right to Deletion</h3>
     <p>You can delete all data the extension stores by uninstalling the extension or clearing Chrome's extension storage. For support emails, or feedback answers that include your email address, contact us and we will delete them.</p>
+    <p>We can also delete the request code and trial date we hold for you — email us your request code. Purchase records are the one exception: tax law requires us to keep them for a set period (see section 8), after which they are deleted.</p>
 
     <h3>Right to Correction</h3>
     <p>If any information we hold is inaccurate, you can request that we correct it.</p>
@@ -298,10 +336,12 @@
     <h2><span class="num">8</span> Data Retention</h2>
     <ul>
       <li><strong>Extension data (local):</strong> Stored on your device only — retained until you clear it or uninstall the extension. Entirely under your control.</li>
+      <li><strong>Licensing records:</strong> Your request code, the date your trial started and your pass details, retained while your pass is active and for up to 12 months afterwards.</li>
+      <li><strong>Pass purchase records:</strong> Kept for as long as Canadian tax law requires us to keep business records (generally six years), then deleted.</li>
       <li><strong>Support emails:</strong> Retained for up to 2 years or until you request deletion</li>
       <li><strong>Uninstall feedback answers:</strong> Retained for up to 2 years</li>
     </ul>
-    <p>Apart from optional feedback form answers, Qwicktry holds no records for extension users.</p>
+    <p>Apart from optional feedback form answers, we hold no other records for extension users.</p>
   </section>
 
   <section id="children">
@@ -335,7 +375,7 @@
       <a href="mailto:support@qwicktry.com">support&#64;qwicktry.com</a>
     </div>
     <p>
-      <strong>Qwicktry</strong><br>
+      <strong>QWICKTRY</strong> (business name registered in Ontario)<br>
       Toronto, Ontario, Canada<br>
       support&#64;qwicktry.com
     </p>
@@ -357,6 +397,7 @@
           <a href="/#modes">Modes</a>
           <a href="/#features">Features</a>
           <a href="/#how">How it works</a>
+          <a href="/#pricing">Pricing</a>
           <a href="/#faq">FAQ</a>
         </div>
         <div class="foot-col">
@@ -369,12 +410,13 @@
           <h4>Legal</h4>
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms of Service</a>
+          <a href="/terms#refunds">Refund Policy</a>
         </div>
       </div>
     </div>
     <div class="foot-legal">
-      <p class="disc">Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies.</p>
-      <p class="copy">© 2026 Qwicktry · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
+      <p class="disc">AtoZ Shift Helper is made by <strong>QWICKTRY</strong>, a business registered in Ontario, Canada. Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies.</p>
+      <p class="copy">© 2026 QWICKTRY · Toronto, Ontario, Canada · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
     </div>
   </div>
 </footer>

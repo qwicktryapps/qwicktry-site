@@ -24,7 +24,7 @@
     "@context": "https://schema.org",
     "@type": "VideoObject",
     "name": "Stop Refreshing AtoZ: Auto-Grab VET & VTO (Free Chrome Extension)",
-    "description": "VET and VTO on AtoZ are gone in seconds. A full walkthrough of AtoZ Shift Helper, a free Chrome extension that watches AtoZ and grabs only the VET, READY shifts and VTO that fit your schedule: install, set your filters, press Start.",
+    "description": "VET and VTO on AtoZ are gone in seconds. A full walkthrough of AtoZ Shift Helper, a Chrome extension (free to try) that watches AtoZ and grabs only the VET, READY shifts and VTO that fit your schedule: install, set your filters, press Start.",
     "thumbnailUrl": ["https://qwicktry.com/media/setup-video.jpg"],
     "uploadDate": "2026-10-29T06:50:45-07:00",
     "duration": "PT2M52S",
@@ -333,6 +333,128 @@
     .tg.no { background: #FEE2E2; color: #DC2626; }
     .demo-note { font-size: 13.5px; color: var(--muted); font-style: italic; margin-top: 16px; text-align: center; }
 
+    /* ─────────────── ANNOUNCEMENT ─────────────── */
+    /* LAUNCH: delete this block (and the bar in the body) once 3.5 is live. */
+    .announce {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px;
+      padding: 10px 16px; text-align: center; font-size: 14px; line-height: 1.45;
+      background: linear-gradient(90deg, #1E1B4B, #3B1D78 50%, #1E1B4B); color: rgba(255,255,255,0.86);
+    }
+    .announce strong { color: #fff; }
+    .announce a { color: #C4B5FD; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .announce a:hover { color: #fff; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 4px rgba(52,211,153,0.22); flex-shrink: 0; }
+    .announce .live-dot { display: inline-block; vertical-align: 1px; margin-right: 10px; }
+
+    /* ─────────────── PRICING ─────────────── */
+    /* Dark, like the stat strip and the CTA. Price, currency, delivery and the
+       refund rule are all on screen before anyone pays (Stripe's checklist). */
+    .pricing { position: relative; isolation: isolate; background: var(--dark); color: #fff; overflow: hidden; }
+    .pricing::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(640px 360px at 18% 0%, rgba(124,58,237,0.30), transparent 65%),
+        radial-gradient(560px 340px at 86% 100%, rgba(99,102,241,0.22), transparent 65%);
+    }
+    .pricing .h2 { color: #fff; }
+    .pricing .sub { color: rgba(255,255,255,0.68); }
+    .now-free {
+      display: flex; align-items: center; gap: 9px; width: fit-content; margin: 0 auto 18px;
+      font-size: 13.5px; font-weight: 700; color: #D1FAE5;
+      background: rgba(16,185,129,0.12); border: 1px solid rgba(52,211,153,0.3); padding: 7px 15px; border-radius: 999px;
+    }
+
+    .plans { max-width: var(--maxw); margin: 52px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .plan {
+      --mx: 50%; --my: 0%;
+      position: relative; overflow: hidden; display: flex; flex-direction: column;
+      padding: 34px 24px 24px; border-radius: 20px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      transition: transform .25s ease, border-color .25s ease;
+    }
+    /* Spotlight that follows the pointer (position set by the script below) */
+    .plan::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+      background: radial-gradient(280px circle at var(--mx) var(--my), rgba(167,139,250,0.17), transparent 65%);
+    }
+    .plan:hover { transform: translateY(-4px); border-color: rgba(167,139,250,0.45); }
+    .plan:hover::before { opacity: 1; }
+    .plan > * { position: relative; }
+
+    .plan.trial { background: linear-gradient(180deg, rgba(16,185,129,0.12), rgba(255,255,255,0.03)); border-color: rgba(52,211,153,0.35); }
+    .plan.pop {
+      border: 1.5px solid transparent;
+      background: linear-gradient(#141A35, #141A35) padding-box,
+                  linear-gradient(135deg, #A78BFA, #6366F1 50%, #C4B5FD) border-box;
+      box-shadow: 0 30px 60px -22px rgba(124,58,237,0.6);
+    }
+    /* A slow sheen across the recommended pass */
+    .plan.pop::after {
+      content: ""; position: absolute; top: 0; left: -70%; width: 45%; height: 100%; pointer-events: none;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.07), transparent);
+      transform: skewX(-18deg); animation: sheen 7s ease-in-out infinite;
+    }
+    @keyframes sheen { 0%, 72% { left: -70%; } 100% { left: 130%; } }
+
+    .plan .pname { font-size: 13px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C4B5FD; }
+    .plan.trial .pname { color: #6EE7B7; }
+    .plan .pprice { font-size: 46px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; margin-top: 14px; color: #fff; font-variant-numeric: tabular-nums; }
+    .plan .pprice .cur { font-size: 15px; font-weight: 800; letter-spacing: 0; color: rgba(255,255,255,0.55); margin-right: 4px; vertical-align: 20px; }
+    .plan.trial .pprice { background: linear-gradient(110deg, #6EE7B7, #D1FAE5); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .plan .pterm { font-size: 14.5px; font-weight: 700; color: rgba(255,255,255,0.88); margin-top: 6px; }
+    .plan .pdesc { flex: 1; font-size: 14.5px; color: rgba(255,255,255,0.6); margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); }
+    /* A tab hanging from the top edge, so it never collides with the pass name */
+    .plan .flag {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%); white-space: nowrap;
+      font-size: 10.5px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase;
+      color: #fff; background: linear-gradient(135deg, #7C3AED, #5B4FCF); padding: 4px 12px 5px; border-radius: 0 0 10px 10px;
+    }
+    .plan .psave {
+      align-self: flex-start; margin-top: 14px; font-size: 12.5px; font-weight: 800; color: #6EE7B7;
+      background: rgba(16,185,129,0.14); border: 1px solid rgba(52,211,153,0.25); padding: 4px 10px; border-radius: 999px;
+    }
+    .plan .pbtn {
+      margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 8px;
+      background: #fff; color: var(--purple); font-weight: 800; font-size: 15px; text-decoration: none;
+      padding: 12px 16px; border-radius: 12px; box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .plan .pbtn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.36); }
+    .plan-note { text-align: center; font-size: 14.5px; color: rgba(255,255,255,0.6); margin-top: 20px; }
+
+    /* The journey from install to pass */
+    .journey { list-style: none; position: relative; max-width: 980px; margin: 60px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+    .journey::before {
+      content: ""; position: absolute; top: 19px; left: 12.5%; right: 12.5%; height: 2px; opacity: .6;
+      background: linear-gradient(90deg, #A78BFA, #34D399 33%, #A78BFA 66%, #6366F1);
+    }
+    .journey li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; padding: 0 10px; }
+    .journey .jn {
+      width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 10px;
+      font-weight: 900; font-size: 15px; color: #fff; background: #1B2140; border: 2px solid rgba(167,139,250,0.65);
+      box-shadow: 0 0 0 6px var(--dark);
+    }
+    .journey li:nth-child(2) .jn { border-color: #34D399; }
+    .journey strong { font-size: 15.5px; color: #fff; }
+    .journey .jt { font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.45; }
+
+    /* Assurances */
+    .assure { max-width: 980px; margin: 56px auto 0; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.08); display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .as { display: flex; gap: 14px; align-items: flex-start; }
+    .as svg { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; color: #A78BFA; }
+    .as strong { display: block; font-size: 15px; color: #fff; margin-bottom: 3px; }
+    .as p { font-size: 14px; color: rgba(255,255,255,0.62); line-height: 1.55; }
+    .as a { color: #C4B5FD; font-weight: 700; text-decoration: none; }
+    .as a:hover { text-decoration: underline; }
+    .pay-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+    .pay-row span { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.14); border-radius: 7px; padding: 4px 10px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .plan, .plan .pbtn { transition: none; }
+      .plan:hover { transform: none; }
+      .plan.pop::after { display: none; }
+    }
+
     /* ─────────────── HOW ─────────────── */
     .how-steps { max-width: 760px; margin: 56px auto 0; }
     .hstep { display: flex; gap: 22px; align-items: flex-start; position: relative; padding-bottom: 38px; }
@@ -403,6 +525,10 @@
       .feat-grid { grid-template-columns: 1fr 1fr; }
       .modes-grid, .problem-wrap { grid-template-columns: 1fr; }
       .stat-grid { grid-template-columns: 1fr 1fr; gap: 24px 14px; }
+      .assure { grid-template-columns: 1fr; max-width: 520px; gap: 22px; }
+    }
+    @media (max-width: 1100px) {
+      .plans { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
     }
     @media (max-width: 680px) {
       .nav-links a:not(.nav-cta) { display: none; }
@@ -412,10 +538,23 @@
       .shift-time { min-width: 0; font-size: 13px; }
       .shift-dur { display: none; }
       .foot-top { flex-direction: column; }
+      .plans { grid-template-columns: 1fr; max-width: 420px; }
+      .now-free { font-size: 12.5px; text-align: center; }
+      .journey { grid-template-columns: 1fr; max-width: 380px; gap: 22px; }
+      .journey::before { top: 20px; bottom: 20px; left: 19px; right: auto; width: 2px; height: auto;
+        background: linear-gradient(180deg, #A78BFA, #34D399 33%, #A78BFA 66%, #6366F1); }
+      .journey li { display: grid; grid-template-columns: 40px 1fr; column-gap: 16px; text-align: left; align-items: start; padding: 0; }
+      .journey .jn { grid-row: span 2; margin-bottom: 0; }
     }
   </style>
 </head>
 <body>
+
+<!-- LAUNCH: remove this bar once 3.5 is live -->
+<div class="announce" role="note">
+  <span><span class="live-dot" aria-hidden="true"></span><strong>Free right now.</strong> When passes arrive in version 3.5, you still get 14 days free, no card needed.</span>
+  <a href="#pricing">See pricing →</a>
+</div>
 
 <!-- ─────────────── NAV ─────────────── -->
 <nav>
@@ -425,6 +564,7 @@
       <a href="#modes">Modes</a>
       <a href="#features">Features</a>
       <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener" class="nav-cta">Add to Chrome</a>
     </div>
@@ -445,7 +585,8 @@
       <div class="hero-trust">
         <span><span class="ic">✓</span> Reacts in under a second</span>
         <span><span class="ic">✓</span> Filtered to your exact schedule</span>
-        <span><span class="ic">✓</span> Runs entirely in your browser</span>
+        <span><span class="ic">✓</span> Your settings stay on your computer</span>
+        <span><span class="ic">✓</span> Free to try, no card needed</span>
       </div>
     </div>
 
@@ -479,7 +620,7 @@
     <div class="stat"><div class="num">&lt;1<span style="font-size:18px">s</span></div><div class="lab">Reacts the moment a shift posts</div></div>
     <div class="stat"><div class="num">2 modes</div><div class="lab">VET / READY &amp; VTO</div></div>
     <div class="stat"><div class="num">25</div><div class="lab">Matching shifts grabbed per check</div></div>
-    <div class="stat"><div class="num">100%</div><div class="lab">Runs locally in your browser</div></div>
+    <div class="stat"><div class="num">$0</div><div class="lab">To start. No card needed</div></div>
   </div>
 </div>
 
@@ -643,6 +784,62 @@
   </div>
 </section>
 
+<!-- ─────────────── PRICING ─────────────── -->
+<section class="block pricing" id="pricing">
+  <div class="container">
+    <!-- LAUNCH: remove this pill once 3.5 is live -->
+    <p class="now-free reveal"><span class="live-dot" aria-hidden="true"></span> Free right now · Passes begin with version 3.5</p>
+    <h2 class="h2 reveal">Start free. No card needed.</h2>
+    <p class="sub reveal">Use every feature free for 14 days, then pick a pass. One-time payment, never renews.</p>
+
+    <div class="plans">
+      <article class="plan trial reveal">
+        <h3 class="pname">Free trial</h3>
+        <div class="pprice">Free</div>
+        <div class="pterm">14 days · No card needed</div>
+        <p class="pdesc">Every feature. Starts the first time you press Start.</p>
+        <a class="pbtn" href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener">Add to Chrome →</a>
+      </article>
+      <article class="plan reveal">
+        <h3 class="pname">7-day pass</h3>
+        <div class="pprice"><span class="cur">US$</span>9.99</div>
+        <div class="pterm">7 days</div>
+        <p class="pdesc">For a busy week.</p>
+      </article>
+      <article class="plan pop reveal">
+        <span class="flag">Recommended</span>
+        <h3 class="pname">30-day pass</h3>
+        <div class="pprice"><span class="cur">US$</span>19.99</div>
+        <div class="pterm">30 days</div>
+        <p class="pdesc">For regular extra hours.</p>
+        <span class="psave">Save 53% vs 7-day</span>
+      </article>
+      <article class="plan reveal">
+        <h3 class="pname">90-day pass</h3>
+        <div class="pprice"><span class="cur">US$</span>39.99</div>
+        <div class="pterm">90 days</div>
+        <p class="pdesc">Best value.</p>
+        <span class="psave">Save 33% vs 30-day</span>
+      </article>
+    </div>
+    <p class="plan-note reveal">Every pass includes every feature.</p>
+
+    <ol class="journey reveal" aria-label="How passes work">
+      <li><span class="jn">1</span><strong>Install</strong><span class="jt">Add it to Chrome</span></li>
+      <li><span class="jn">2</span><strong>14 days free</strong><span class="jt">Starts when you press Start</span></li>
+      <li><span class="jn">3</span><strong>Get a pass</strong><span class="jt">In the extension, when you're ready</span></li>
+      <li><span class="jn">4</span><strong>Keep going</strong><span class="jt">It switches on at your next Start</span></li>
+    </ol>
+
+    <div class="assure reveal">
+      <div class="as"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><div><strong>Secure checkout by Stripe</strong><p>Prices in US dollars. Your local currency and any tax are shown before you pay.</p></div></div>
+      <div class="as"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg><div><strong>Instant, never renews</strong><p>Your pass switches on at your next Start and simply ends when it's done.</p></div></div>
+      <div class="as"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg><div><strong>Refunds</strong><p>You try it free first, so passes can't be refunded once started. Billing errors and problems on our side are refunded. <a href="/terms#refunds">Refund policy</a></p></div></div>
+    </div>
+    <div class="pay-row reveal"><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span><span>Google Pay</span></div>
+  </div>
+</section>
+
 <!-- ─────────────── FAQ ─────────────── -->
 <section class="block" id="faq">
   <div class="container">
@@ -668,7 +865,36 @@
       </details>
       <details class="faq-item reveal">
         <summary>Is my account information safe? <span class="plus">+</span></summary>
-        <div class="ans">Yes. Everything runs locally in your own browser. Your filters are stored on your device only — they're never sent to us. The extension talks only to AtoZ's own scheduling pages to read and claim shifts on your behalf, and it never touches your activity on any other site.</div>
+        <div class="ans">Yes. Your filters and history stay on your computer. We never receive your Employee ID, your password or your schedule, and we never see your card details. See our <a href="/privacy" style="color:var(--purple);font-weight:700;">Privacy Policy</a>.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>How much does it cost? <span class="plus">+</span></summary>
+        <!-- LAUNCH: drop "It's free right now. From version 3.5," once 3.5 is live -->
+        <div class="ans">It's free right now. From version 3.5, you get 14 days free with no card needed. After that, a pass costs <strong>US$9.99 for 7 days</strong>, <strong>US$19.99 for 30 days</strong> or <strong>US$39.99 for 90 days</strong>, plus tax where it applies.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Is it a subscription? <span class="plus">+</span></summary>
+        <div class="ans">No. A pass never renews, and you're never charged again unless you buy another.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>How do I pay? <span class="plus">+</span></summary>
+        <div class="ans">Through Stripe's secure checkout, by card, Apple Pay or Google Pay. Your statement will show <strong>LINK.COM* QWICKTRY</strong>.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Can I get a refund? <span class="plus">+</span></summary>
+        <div class="ans">You can try every feature free for 14 days, so passes can't be refunded once they've started. We do refund billing errors and problems on our side. See the <a href="/terms#refunds" style="color:var(--purple);font-weight:700;">refund policy</a>.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>What happens when my pass ends? <span class="plus">+</span></summary>
+        <div class="ans">The extension stops until you buy another pass. Your settings are kept.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Can I share a pass? <span class="plus">+</span></summary>
+        <div class="ans">No. A pass works only with your own AtoZ account, on any of your computers.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Does the trial restart if I reinstall? <span class="plus">+</span></summary>
+        <div class="ans">No. Your trial is linked to your AtoZ account, not to your browser or computer.</div>
       </details>
       <details class="faq-item reveal">
         <summary>Which browser does it work on? <span class="plus">+</span></summary>
@@ -687,7 +913,7 @@
   <h2>Stop refreshing.<br>Start grabbing.</h2>
   <p>Set your schedule once and let AtoZ Shift Helper win the VET and VTO race for you.</p>
   <a href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener" class="btn btn-white">Add to Chrome →</a>
-  <p class="fine">Runs right on your AtoZ Find Shifts and VTO pages</p>
+  <p class="fine">Free to start, no card needed · passes from US$9.99</p>
 </section>
 
 <!-- ─────────────── FOOTER ─────────────── -->
@@ -704,6 +930,7 @@
           <a href="#modes">Modes</a>
           <a href="#features">Features</a>
           <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
         </div>
         <div class="foot-col">
@@ -716,12 +943,13 @@
           <h4>Legal</h4>
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms of Service</a>
+          <a href="/terms#refunds">Refund Policy</a>
         </div>
       </div>
     </div>
     <div class="foot-legal">
-      <p class="disc">Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies. Qwicktry accepts no liability for any consequences arising from the use of this software.</p>
-      <p class="copy">© 2026 Qwicktry · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
+      <p class="disc">AtoZ Shift Helper is made by <strong>QWICKTRY</strong>, a business registered in Ontario, Canada. Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies. Qwicktry accepts no liability for any consequences arising from the use of this software.</p>
+      <p class="copy">© 2026 QWICKTRY · Toronto, Ontario, Canada · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
     </div>
   </div>
 </footer>
@@ -735,6 +963,13 @@
     el.style.transitionDelay = (Math.min(i % 6, 5) * 60) + 'ms';
     io.observe(el);
   });
+
+  // Pricing cards: a soft light follows the pointer (CSS .plan::before)
+  document.querySelectorAll('.plan').forEach((card) => card.addEventListener('pointermove', (e) => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }));
 
   // Setup video: click to play. Nothing loads from YouTube until a button
   // with data-play is pressed; then YouTube's privacy-enhanced player replaces
