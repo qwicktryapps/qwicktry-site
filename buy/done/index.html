@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank you — AtoZ Shift Helper</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0B1020" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      min-height: 100vh; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #0B1020; color: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; position: relative; isolation: isolate;
+    }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(640px 360px at 18% 0%, rgba(124,58,237,0.30), transparent 65%),
+                  radial-gradient(560px 340px at 86% 100%, rgba(99,102,241,0.22), transparent 65%); }
+    a { color: inherit; }
+    .top { max-width: 1040px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 17px; text-decoration: none; letter-spacing: -0.3px; }
+    .logo .mark { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: 15px;
+                  background: linear-gradient(135deg, #5B4FCF, #764ba2); box-shadow: 0 6px 16px rgba(91,79,207,0.4); }
+    .logo .q { color: #C4B5FD; }
+    .top a.help { color: rgba(255,255,255,0.62); font-size: 14px; text-decoration: none; }
+
+    .card { max-width: 560px; margin: 48px auto 0; padding: 36px 30px 30px; border-radius: 22px; text-align: center;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); }
+    .icon { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; display: grid; place-items: center; font-size: 30px; }
+    .icon.ok   { background: rgba(16,185,129,0.15); border: 1px solid rgba(52,211,153,0.4); color: #6EE7B7; }
+    .icon.wait { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); }
+    .icon.bad  { background: rgba(239,68,68,0.12); border: 1px solid rgba(248,113,113,0.4); color: #FCA5A5; }
+    h1 { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; line-height: 1.2; }
+    .lead { color: rgba(255,255,255,0.72); font-size: 16px; margin-top: 10px; }
+    .steps { text-align: left; max-width: 400px; margin: 22px auto 0; padding: 0; list-style: none; counter-reset: s; }
+    .steps li { counter-increment: s; position: relative; padding: 0 0 12px 38px; font-size: 15px; color: rgba(255,255,255,0.86); }
+    .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+                        display: grid; place-items: center; font-size: 13px; font-weight: 800; background: #5B4FCF; color: #fff; }
+    .small { margin-top: 18px; color: rgba(255,255,255,0.55); font-size: 13.5px; line-height: 1.7; }
+    .small a { color: #C4B5FD; font-weight: 600; text-decoration: none; }
+    .spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.18); border-top-color: #C4B5FD; animation: r 0.9s linear infinite; }
+    @keyframes r { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="logo" href="/"><span class="mark">⚡</span> AtoZ <span class="q">Shift Helper</span></a>
+    <a class="help" href="mailto:support@qwicktry.com">Need help?</a>
+  </header>
+  <main><div class="card" id="card" aria-live="polite">
+    <div class="icon wait"><div class="spin"></div></div>
+    <h1>Confirming your payment…</h1>
+    <p class="lead">This takes a moment.</p>
+  </div></main>
+
+<script>
+  // Asks the licence server what this checkout bought and when it starts.
+  // The answer never includes a key or an email address: the extension
+  // collects the pass itself. Only known servers are accepted.
+  const APIS = { live: "https://atoz-licence.qwick-try-apps.workers.dev",
+                 staging: "https://atoz-licence-staging.qwick-try-apps.workers.dev",
+                 local: "http://localhost:8787" };          // wrangler dev / tools/dev-server.js
+  const q   = new URLSearchParams(location.search);
+  const API = Object.hasOwn(APIS, q.get("env") || "") ? APIS[q.get("env")] : APIS.live;
+  const SID = q.get("session_id") || "";
+  const card = document.getElementById("card");
+  const NAMES = { "7d": "7-day pass", "30d": "30-day pass", "90d": "90-day pass" };
+  const day = ms => new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(new Date(ms));
+  const SUPPORT = `Questions? <a href="mailto:support@qwicktry.com">support@qwicktry.com</a>. Your receipt comes from Link (Stripe's checkout), and your statement shows <b>LINK.COM* QWICKTRY</b>.`;
+
+  function show(icon, title, lead, extra = "") {
+    card.innerHTML = `<div class="icon ${icon}">${icon === "ok" ? "✓" : icon === "bad" ? "!" : '<div class="spin"></div>'}</div>
+      <h1>${title}</h1><p class="lead">${lead}</p>${extra}<p class="small">${SUPPORT}</p>`;
+  }
+
+  async function check(attempt) {
+    if (!/^cs_(test|live)_[A-Za-z0-9]{10,200}$/.test(SID)) {
+      show("bad", "We couldn't find that payment", "If you paid, your pass will still arrive. Open the extension in a minute, or email us with your receipt.");
+      return;
+    }
+    let s = null;
+    try {
+      const res = await fetch(`${API}/session?id=${encodeURIComponent(SID)}`, { credentials: "omit" });
+      if (res.ok) s = await res.json();
+    } catch (_) {}
+
+    if (s && s.status === "ready") {
+      show("ok", `Your ${NAMES[s.pass] || "pass"} is ready`, `It runs until ${day(s.endsAtMs)}.`,
+        `<ol class="steps"><li>Go back to your AtoZ page.</li><li>Press <b>Start</b> in AtoZ Shift Helper. It picks the pass up by itself.</li></ol>`);
+    } else if (s && s.status === "queued") {
+      show("ok", "Thank you, you're all set", `Your ${NAMES[s.pass] || "pass"} starts on <b>${day(s.startsAtMs)}</b>, when your current trial or pass ends, and runs until ${day(s.endsAtMs)}.`,
+        `<p class="small" style="margin-top:14px">Nothing else to do. It switches on by itself, even mid-run.</p>`);
+    } else if (s && s.status === "unpaid") {
+      show("bad", "The payment didn't go through", "No pass was bought and you haven't been charged. You can try again from the extension.");
+    } else if (attempt < 30) {
+      // Stripe tells our server a moment after it tells you; check again.
+      setTimeout(() => check(attempt + 1), 2000);
+    } else {
+      show("ok", "Payment received", "Your pass is on its way. It can take a minute to arrive. Press Start in the extension, or reopen it.");
+    }
+  }
+  check(0);
+</script>
+</body>
+</html>

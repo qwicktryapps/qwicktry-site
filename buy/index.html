@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get a pass — AtoZ Shift Helper</title>
+  <meta name="description" content="Buy a 7, 30 or 90-day pass for AtoZ Shift Helper. One-time payment, never renews." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0B1020" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple: #5B4FCF; --dark: #0B1020; --ink: #0F172A; --white: #fff;
+      --soft: rgba(255,255,255,0.62); --line: rgba(255,255,255,0.10); --green: #6EE7B7;
+    }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      min-height: 100vh; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--dark); color: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; position: relative; isolation: isolate;
+    }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(640px 360px at 18% 0%, rgba(124,58,237,0.30), transparent 65%),
+                  radial-gradient(560px 340px at 86% 100%, rgba(99,102,241,0.22), transparent 65%); }
+    a { color: inherit; }
+    .top { max-width: 1040px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 17px; text-decoration: none; letter-spacing: -0.3px; }
+    .logo .mark { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: 15px;
+                  background: linear-gradient(135deg, #5B4FCF, #764ba2); box-shadow: 0 6px 16px rgba(91,79,207,0.4); }
+    .logo .q { color: #C4B5FD; }
+    .top a.help { color: var(--soft); font-size: 14px; text-decoration: none; }
+    .top a.help:hover { color: #fff; }
+
+    main { max-width: 1040px; margin: 0 auto; padding: 24px 20px 64px; }
+    h1 { text-align: center; font-size: clamp(30px, 5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+    .sub { text-align: center; color: var(--soft); font-size: 17px; margin-top: 10px; }
+    .notice { max-width: 640px; margin: 22px auto 0; padding: 11px 16px; border-radius: 12px; text-align: center; font-size: 14.5px; font-weight: 600; }
+    .notice.founding { background: rgba(16,185,129,0.12); border: 1px solid rgba(52,211,153,0.35); color: #D1FAE5; }
+    .notice.start    { background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: rgba(255,255,255,0.86); font-weight: 500; }
+    .notice.warn     { background: rgba(245,158,11,0.12); border: 1px solid rgba(251,191,36,0.4); color: #FDE68A; }
+    .notice.bad      { background: rgba(239,68,68,0.12); border: 1px solid rgba(248,113,113,0.4); color: #FECACA; }
+
+    .plans { max-width: 980px; margin: 30px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .plan { position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 34px 24px 24px; border-radius: 20px;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+    .plan.pop { border: 1.5px solid transparent;
+                background: linear-gradient(#141A35, #141A35) padding-box, linear-gradient(135deg, #A78BFA, #6366F1 50%, #C4B5FD) border-box;
+                box-shadow: 0 30px 60px -22px rgba(124,58,237,0.6); }
+    .flag { position: absolute; top: 0; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 10.5px; font-weight: 800;
+            letter-spacing: .9px; text-transform: uppercase; color: #fff; background: linear-gradient(135deg, #7C3AED, #5B4FCF);
+            padding: 4px 12px 5px; border-radius: 0 0 10px 10px; }
+    .pname { font-size: 13px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C4B5FD; }
+    .price { margin-top: 14px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .price .now { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+    .price .cur { font-size: 14px; font-weight: 800; color: rgba(255,255,255,0.55); align-self: flex-start; margin-top: 6px; }
+    .price .was { font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.45); text-decoration: line-through; }
+    .term { font-size: 14.5px; font-weight: 700; color: rgba(255,255,255,0.88); margin-top: 6px; }
+    .desc { flex: 1; font-size: 14.5px; color: var(--soft); margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .go { margin-top: 18px; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 13px 16px; border-radius: 12px;
+          font-weight: 800; font-size: 15px; text-decoration: none; background: #fff; color: var(--purple);
+          box-shadow: 0 10px 24px rgba(0,0,0,0.28); transition: transform .15s, box-shadow .15s; }
+    .go:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.36); }
+    .plan:not(.pop) .go { background: rgba(255,255,255,0.08); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,0.18); }
+    .plan:not(.pop) .go:hover { background: rgba(255,255,255,0.14); }
+    .go.off { opacity: .45; cursor: not-allowed; }
+    .go.off:hover { transform: none; }
+
+    .agree { max-width: 640px; margin: 18px auto 0; display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; border-radius: 12px;
+             background: rgba(255,255,255,0.05); border: 1px solid var(--line); font-size: 14.5px; color: rgba(255,255,255,0.9); cursor: pointer; }
+    .agree input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: #8B5CF6; cursor: pointer; }
+    .agree a { color: #C4B5FD; font-weight: 600; text-decoration: none; }
+    .agree.nudge { border-color: rgba(251,191,36,0.7); background: rgba(245,158,11,0.12); }
+
+    .fine { max-width: 720px; margin: 28px auto 0; text-align: center; color: rgba(255,255,255,0.55); font-size: 13.5px; line-height: 1.7; }
+    .fine a { color: #C4B5FD; font-weight: 600; text-decoration: none; }
+    .fine a:hover { text-decoration: underline; }
+    .pay { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .pay span { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.03);
+                border: 1px solid rgba(255,255,255,0.14); border-radius: 7px; padding: 4px 10px; }
+
+    .state { max-width: 560px; margin: 40px auto 0; text-align: center; padding: 30px 26px; border-radius: 20px;
+             background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+    .state h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .state p { color: var(--soft); font-size: 15px; }
+    .state .btnrow { margin-top: 18px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .state .btnrow a, .state .btnrow button { padding: 11px 18px; border-radius: 10px; font: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer;
+                     text-decoration: none; background: #fff; color: var(--purple); border: 0; }
+    .skeleton { opacity: .45; }
+
+    @media (max-width: 860px) { .plans { grid-template-columns: 1fr; max-width: 420px; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="logo" href="/"><span class="mark">⚡</span> AtoZ <span class="q">Shift Helper</span></a>
+    <a class="help" href="mailto:support@qwicktry.com">Need help?</a>
+  </header>
+
+  <main>
+    <h1>Get a pass</h1>
+    <p class="sub">One-time payment. Never renews.</p>
+    <div id="notices"></div>
+    <div id="body"><div class="state skeleton"><p>Loading prices…</p></div></div>
+
+    <p class="fine">
+      Prices in US dollars. Your local currency and any tax are shown before you pay.
+      Secure checkout by Stripe; your statement shows <b>LINK.COM* QWICKTRY</b>.
+      By continuing you agree to our <a href="/terms">Terms</a>.
+      You can try every feature free first, so passes can't be refunded once they start
+      (<a href="/terms#refunds">refund policy</a>).
+    </p>
+    <div class="pay"><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span><span>Google Pay</span></div>
+  </main>
+
+<script>
+  // The licence server answers for prices, the founding offer, when a pass
+  // would start, and whether this account can buy. Only known servers are
+  // accepted (?env=staging is for testing), so a link can't point this page
+  // at someone else's.
+  const APIS = { live: "https://atoz-licence.qwick-try-apps.workers.dev",
+                 staging: "https://atoz-licence-staging.qwick-try-apps.workers.dev",
+                 local: "http://localhost:8787" };          // wrangler dev / tools/dev-server.js
+  const q    = new URLSearchParams(location.search);
+  const ENV  = Object.hasOwn(APIS, q.get("env") || "") ? q.get("env") : "live";
+  const API  = APIS[ENV];
+  const CODE = (q.get("code") || "").toUpperCase();
+  const CODE_RE = /^[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{4}$/;
+
+  const NAMES = { "7d": ["7-day pass", "For a busy week."], "30d": ["30-day pass", "For regular extra hours."], "90d": ["90-day pass", "Best value."] };
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const money = cents => (cents / 100).toFixed(2);
+  const curLabel = cur => (cur || "usd").toUpperCase() === "USD" ? "US$" : (cur || "").toUpperCase() + " ";
+  const day = ms => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(ms));
+  // Stripe rounds a percent-off coupon's discount to the nearest cent.
+  const discounted = (cents, pct) => cents - Math.round(cents * pct / 100);
+
+  function state(title, text, actions = "") {
+    $("body").innerHTML = `<div class="state"><h2>${title}</h2><p>${text}</p>${actions ? `<div class="btnrow">${actions}</div>` : ""}</div>`;
+  }
+
+  async function load() {
+    if (!CODE_RE.test(CODE)) {
+      state("Open this from the extension",
+        "Passes are matched to your AtoZ account, so they're bought from the extension: open AtoZ Shift Helper and press <b>Get a pass</b>.",
+        `<a href="/">Back to qwicktry.com</a>`);
+      return;
+    }
+    if (q.get("cancelled")) $("notices").innerHTML = `<div class="notice warn">Checkout cancelled. No payment was taken.</div>`;
+
+    let o;
+    try {
+      const res = await fetch(`${API}/offer?code=${encodeURIComponent(CODE)}`, { credentials: "omit" });
+      if (!res.ok) throw new Error(res.status);
+      o = await res.json();
+    } catch (_) {
+      state("Couldn't load prices", "Check your connection and try again.", `<button onclick="location.reload()">Try again</button>`);
+      return;
+    }
+
+    if (o.blocked) {
+      state("This account can't buy a pass right now",
+        "That usually follows a disputed payment. If you think it's a mistake, email us and we'll sort it out.",
+        `<a href="mailto:support@qwicktry.com?subject=${encodeURIComponent("Pass purchase — account " + CODE)}">Email support</a>`);
+      return;
+    }
+
+    const notices = [];
+    if (o.founding) notices.push(`<div class="notice founding">Founding offer: ${o.founding.percent}% off your first pass, until ${day(o.founding.deadlineMs)}. <a href="/terms#founding" style="color:#A7F3D0">Terms</a></div>`);
+    notices.push(o.startsAtMs - o.now > 60 * 1000
+      ? `<div class="notice start">Your pass starts <b>${day(o.startsAtMs)}</b>, when your current trial or pass ends, so you don't lose a day.</div>`
+      : `<div class="notice start">Your pass starts as soon as you pay.</div>`);
+    $("notices").insertAdjacentHTML("beforeend", notices.join(""));
+
+    const cards = o.passes.map(p => {
+      const [name, desc] = NAMES[p.id] || [`${p.days}-day pass`, ""];
+      const pct = o.founding ? o.founding.percent : 0;
+      const now = pct ? discounted(p.amount, pct) : p.amount;
+      const href = `${API}/checkout?code=${encodeURIComponent(CODE)}&pass=${encodeURIComponent(p.id)}&agree=1`;
+      return `<article class="plan${p.id === "30d" ? " pop" : ""}">
+        ${p.id === "30d" ? '<span class="flag">Recommended</span>' : ""}
+        <h3 class="pname">${esc(name)}</h3>
+        <div class="price"><span class="cur">${curLabel(p.currency)}</span><span class="now">${money(now)}</span>${pct ? `<span class="was">${money(p.amount)}</span>` : ""}</div>
+        <div class="term">${p.days} days</div>
+        <p class="desc">${esc(desc)}</p>
+        <a class="go" data-href="${href}">Continue to payment →</a>
+      </article>`;
+    }).join("");
+    // UK/EU law needs this asked before payment, and Stripe's checkout can't
+    // show our wording. The server refuses checkout without it (agree=1).
+    $("body").innerHTML = `<label class="agree" id="agree"><input type="checkbox" id="agreeBox" />
+        <span>I ask for my pass to start as soon as it's due, and I understand my right to cancel ends once it starts (<a href="/terms#refunds">Terms</a>).</span></label>
+      <div class="plans">${cards}</div>`;
+    const box = $("agreeBox"), links = document.querySelectorAll(".go");
+    const sync = () => links.forEach(a => {
+      if (box.checked) { a.href = a.dataset.href; a.classList.remove("off"); a.removeAttribute("aria-disabled"); }
+      else { a.removeAttribute("href"); a.classList.add("off"); a.setAttribute("aria-disabled", "true"); }
+    });
+    box.addEventListener("change", () => { $("agree").classList.remove("nudge"); sync(); });
+    links.forEach(a => a.addEventListener("click", e => {
+      if (box.checked) return;
+      e.preventDefault();
+      $("agree").classList.add("nudge");
+      box.focus();
+    }));
+    sync();
+  }
+  load();
+</script>
+</body>
+</html>
