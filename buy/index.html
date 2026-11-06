@@ -64,14 +64,28 @@
     .go:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.36); }
     .plan:not(.pop) .go { background: rgba(255,255,255,0.08); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,0.18); }
     .plan:not(.pop) .go:hover { background: rgba(255,255,255,0.14); }
-    .go.off { opacity: .45; cursor: not-allowed; }
-    .go.off:hover { transform: none; }
+    button.go { width: 100%; border: 0; font-family: inherit; cursor: pointer; }
+    .plan:not(.pop) button.go { border: 1px solid rgba(255,255,255,0.18); }
+    .go:disabled { cursor: progress; opacity: .8; transform: none; }
+    /* The pass someone clicked, while the box above asks to be ticked. */
+    .plan.chosen { box-shadow: 0 0 0 2px #A78BFA, 0 24px 48px -22px rgba(124,58,237,0.6); }
 
     .agree { max-width: 640px; margin: 18px auto 0; display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; border-radius: 12px;
-             background: rgba(255,255,255,0.05); border: 1px solid var(--line); font-size: 14.5px; color: rgba(255,255,255,0.9); cursor: pointer; }
+             background: rgba(255,255,255,0.05); border: 1px solid var(--line); font-size: 14.5px; color: rgba(255,255,255,0.9); cursor: pointer;
+             transition: border-color .2s, background .2s, box-shadow .2s; }
     .agree input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: #8B5CF6; cursor: pointer; }
     .agree a { color: #C4B5FD; font-weight: 600; text-decoration: none; }
-    .agree.nudge { border-color: rgba(251,191,36,0.7); background: rgba(245,158,11,0.12); }
+    .agree .need { display: none; margin-top: 6px; font-size: 13px; font-weight: 700; color: #FDE68A; }
+    /* Clicked "Continue" before ticking: amber, a short shake, and why. */
+    .agree.nudge { border-color: rgba(251,191,36,0.85); background: rgba(245,158,11,0.14); box-shadow: 0 0 0 4px rgba(251,191,36,0.15); }
+    .agree.nudge .need { display: block; }
+    .agree.shake { animation: shake .5s cubic-bezier(.36,.07,.19,.97); }
+    .agree.ok { border-color: rgba(52,211,153,0.55); background: rgba(16,185,129,0.10); }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(3px); }
+      30%, 50%, 70% { transform: translateX(-6px); } 40%, 60% { transform: translateX(6px); }
+    }
+    @media (prefers-reduced-motion: reduce) { .agree.shake { animation: none; } }
 
     .fine { max-width: 720px; margin: 28px auto 0; text-align: center; color: rgba(255,255,255,0.55); font-size: 13.5px; line-height: 1.7; }
     .fine a { color: #C4B5FD; font-weight: 600; text-decoration: none; }
@@ -149,6 +163,12 @@
       return;
     }
     if (q.get("cancelled")) $("notices").innerHTML = `<div class="notice warn">Checkout cancelled. No payment was taken.</div>`;
+    // Sent back by our server instead of to checkout (see handleCheckout).
+    const ERR = {
+      checkout: `<div class="notice bad">Couldn't open the payment page. Nothing was charged. Please try again in a minute.</div>`,
+      bad_pass: `<div class="notice warn">That pass isn't available. Please choose one below.</div>`
+    };
+    if (ERR[q.get("error")]) $("notices").innerHTML = ERR[q.get("error")];
 
     let o;
     try {
@@ -162,7 +182,7 @@
 
     if (o.blocked) {
       state("This account can't buy a pass right now",
-        "That usually follows a disputed payment. If you think it's a mistake, email us and we'll sort it out.",
+        "That usually follows a disputed payment, or several refunds. Passes you already have keep working. If you think it's a mistake, email us and we'll sort it out.",
         `<a href="mailto:support@qwicktry.com?subject=${encodeURIComponent("Pass purchase — account " + CODE)}">Email support</a>`);
       return;
     }
@@ -185,27 +205,48 @@
         <div class="price"><span class="cur">${curLabel(p.currency)}</span><span class="now">${money(now)}</span>${pct ? `<span class="was">${money(p.amount)}</span>` : ""}</div>
         <div class="term">${p.days} days</div>
         <p class="desc">${esc(desc)}</p>
-        <a class="go" data-href="${href}">Continue to payment →</a>
+        <button type="button" class="go" data-href="${href}" aria-describedby="agree">Continue to payment →</button>
       </article>`;
     }).join("");
     // UK/EU law needs this asked before payment, and Stripe's checkout can't
     // show our wording. The server refuses checkout without it (agree=1).
     $("body").innerHTML = `<label class="agree" id="agree"><input type="checkbox" id="agreeBox" />
-        <span>I ask for my pass to start as soon as it's due, and I understand my right to cancel ends once it starts (<a href="/terms#refunds">Terms</a>).</span></label>
+        <span><span>I ask for my pass to start as soon as it's due, and I understand my right to cancel ends once it starts (<a href="/terms#refunds">Terms</a>).</span>
+        <span class="need" role="alert">Tick this box to continue.</span></span></label>
       <div class="plans">${cards}</div>`;
-    const box = $("agreeBox"), links = document.querySelectorAll(".go");
-    const sync = () => links.forEach(a => {
-      if (box.checked) { a.href = a.dataset.href; a.classList.remove("off"); a.removeAttribute("aria-disabled"); }
-      else { a.removeAttribute("href"); a.classList.add("off"); a.setAttribute("aria-disabled", "true"); }
-    });
-    box.addEventListener("change", () => { $("agree").classList.remove("nudge"); sync(); });
-    links.forEach(a => a.addEventListener("click", e => {
-      if (box.checked) return;
-      e.preventDefault();
-      $("agree").classList.add("nudge");
-      box.focus();
+
+    // The buttons always look ready. Clicking one before the box is ticked
+    // brings the box into view, shakes it, says why, and marks the pass
+    // chosen; ticking it then puts that pass's button under the cursor, so a
+    // second click continues. The tick stays a deliberate step of its own.
+    const box = $("agreeBox"), agree = $("agree"), buttons = document.querySelectorAll(".go");
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let chosen = null;
+    const nudge = () => {
+      agree.classList.remove("ok", "shake");
+      void agree.offsetWidth;                         // restart the shake
+      agree.classList.add("nudge", "shake");
+      agree.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
+      box.focus({ preventScroll: true });
+    };
+    buttons.forEach(b => b.addEventListener("click", () => {
+      chosen = b;
+      document.querySelectorAll(".plan").forEach(p => p.classList.toggle("chosen", p.contains(b)));
+      if (!box.checked) { nudge(); return; }
+      b.disabled = true;                              // one checkout, however eager the click
+      b.textContent = "Opening secure checkout…";
+      location.href = b.dataset.href;
     }));
-    sync();
+    box.addEventListener("change", () => {
+      agree.classList.remove("nudge", "shake");
+      agree.classList.toggle("ok", box.checked);
+      if (box.checked && chosen) chosen.focus();
+    });
+    // Back from checkout (the page may come back as it was left).
+    addEventListener("pageshow", e => {
+      if (e.persisted) buttons.forEach(b => { b.disabled = false; b.textContent = "Continue to payment →"; });
+    });
+    if (q.get("error") === "agree") nudge();
   }
   load();
 </script>
