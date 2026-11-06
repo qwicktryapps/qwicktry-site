@@ -90,7 +90,7 @@
 
     if (s && s.status === "ready") {
       show("ok", `Your ${NAMES[s.pass] || "pass"} is ready`, `It runs until ${day(s.endsAtMs)}.`,
-        `<ol class="steps"><li>Go back to your AtoZ page.</li><li>Press <b>Start</b> in AtoZ Shift Helper. It picks the pass up by itself.</li></ol>`);
+        `<ol class="steps"><li>Go back to your AtoZ page. It shows your pass by itself within a minute.</li><li>Press <b>Start</b> (in the extension, or on the page).</li></ol>`);
     } else if (s && s.status === "queued") {
       show("ok", "Thank you, you're all set", `Your ${NAMES[s.pass] || "pass"} starts on <b>${day(s.startsAtMs)}</b>, when your current trial or pass ends, and runs until ${day(s.endsAtMs)}.`,
         `<p class="small" style="margin-top:14px">Nothing else to do. It switches on by itself, even mid-run.</p>`);
@@ -100,7 +100,7 @@
       // Stripe tells our server a moment after it tells you; check again.
       setTimeout(() => check(attempt + 1), 2000);
     } else {
-      show("ok", "Payment received", "Your pass is on its way. It can take a minute to arrive. Press Start in the extension, or reopen it.");
+      show("ok", "Payment received", "Your pass is on its way. Go back to your AtoZ page: it shows up there by itself within a minute.");
     }
   }
   check(0);

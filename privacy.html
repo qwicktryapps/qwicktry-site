@@ -227,11 +227,11 @@
         <tr><td>Your pass details (which pass, its end date, and the pass key we issued)</td><td>So a pass you buy can switch on by itself, and be sent again if you need it</td><td><span class="tag min">Yes</span></td></tr>
       </tbody>
     </table>
-    <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it when it checks for a new pass, right after you buy or when your trial or pass ends.</p>
+    <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it only after you've first pressed Start: when you press Start, when it shows your current trial and passes (as your AtoZ page opens, when you return to it, or when you open the extension; at most once a minute), for a few minutes after you choose Get a pass, and when your trial or pass ends.</p>
     <p>Our licensing server runs on Cloudflare. As with any website, Cloudflare sees your IP address when the extension connects; our licensing records don't include it.</p>
     <div class="box green">
       <strong>Once you have a pass, it's checked on your own device</strong>
-      A pass key is verified on your device using cryptography — it is never sent to us. While your pass is active, the only thing the extension fetches from us is our list of cancelled passes, when you press Start and about every six hours while it runs. That download sends nothing about you.
+      A pass key is verified on your device using cryptography — it is never sent to us. To check it, the extension also downloads our list of cancelled passes when you press Start and about every six hours while it runs. That download sends nothing about you. Showing your trial and passes (above) is only for display: it never decides whether the extension runs.
     </div>
     <div class="box blue">
       <strong>What we never receive</strong>
