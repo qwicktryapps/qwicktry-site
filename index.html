@@ -422,6 +422,57 @@
     .plan .pbtn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.36); }
     .plan-note { text-align: center; font-size: 14.5px; color: rgba(255,255,255,0.6); margin-top: 20px; }
 
+    /* Pass cards turn over to show how to buy: passes are bought in the
+       extension, so the cards have no buy button of their own. Both faces sit
+       in one grid cell, so the back is always the size of the front. */
+    .flip { display: grid; perspective: 1200px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .flip-inner {
+      display: grid; transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.45,.05,.55,.95), translate .25s ease;
+    }
+    .flip.flipped .flip-inner { transform: rotateY(180deg); }
+    @media (hover: hover) {
+      .flip:hover .flip-inner { translate: 0 -4px; }
+      .flip:hover .info { background: #C4B5FD; color: #141A35; }
+    }
+    /* A face that turns away also hides itself half-way, when the card is
+       edge-on, in case a browser lets a turned-away face show through */
+    .flip .plan {
+      grid-area: 1 / 1; -webkit-backface-visibility: hidden; backface-visibility: hidden;
+      transition: border-color .25s ease, visibility 0s linear .25s;
+    }
+    .flip.flipped .back, .flip:not(.flipped) .front { transition-delay: 0s; }
+    .flip .front { transform: rotateY(0deg); }
+    .flip .back { transform: rotateY(180deg); visibility: hidden; padding-top: 46px; }
+    .flip.flipped .front { visibility: hidden; }
+    .flip.flipped .back { visibility: visible; }
+    .flip .back::after { display: none; }
+    .plan .info {
+      position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; padding: 0;
+      display: grid; place-items: center; border-radius: 50%; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1; color: #C4B5FD;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(196,181,253,0.4);
+      transition: background .2s, color .2s;
+    }
+    /* The "i" is the card's button, so its focus ring goes round the whole card */
+    .flip .back:focus { outline: none; }
+    .flip:has(.info:focus-visible) .front, .flip .back:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+    @supports selector(:has(*)) { .plan .info:focus-visible { outline: none; } }
+    .plan .back-link {
+      position: absolute; top: 12px; left: 10px; padding: 4px 6px; border: 0; background: none; cursor: pointer;
+      font-family: inherit; font-size: 13.5px; font-weight: 700; color: #C4B5FD;
+    }
+    .plan .back-link:hover { color: #fff; }
+    .buy-steps { list-style: none; counter-reset: step; flex: 1; display: grid; gap: 10px; align-content: start; margin-top: 14px; }
+    .buy-steps li { counter-increment: step; position: relative; padding-left: 32px; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.75); }
+    .buy-steps li::before {
+      content: counter(step); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 11.5px; font-weight: 800; color: #fff;
+      background: #1B2140; border: 1.5px solid rgba(167,139,250,0.65);
+    }
+    .buy-steps li:nth-child(2)::before { border-color: #34D399; }
+    .buy-steps strong { color: #fff; }
+
     /* The journey from install to pass */
     .journey { list-style: none; position: relative; max-width: 980px; margin: 60px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); }
     .journey::before {
@@ -453,6 +504,12 @@
       .plan, .plan .pbtn { transition: none; }
       .plan:hover { transform: none; }
       .plan.pop::after { display: none; }
+      /* The card doesn't turn: the two faces cross-fade */
+      .flip-inner, .flip.flipped .flip-inner { transform: none; transition: none; }
+      .flip .back { transform: none; }
+      .flip:hover .flip-inner { translate: none; }
+      .flip .plan { opacity: 0; transition: opacity .15s ease, visibility 0s linear .15s; }
+      .flip.flipped .back, .flip:not(.flipped) .front { opacity: 1; transition-delay: 0s; }
     }
 
     /* ─────────────── HOW ─────────────── */
@@ -800,29 +857,75 @@
         <p class="pdesc">Every feature. Starts the first time you press Start.</p>
         <a class="pbtn" href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener">Add to Chrome →</a>
       </article>
-      <article class="plan reveal">
-        <h3 class="pname">7-day pass</h3>
-        <div class="pprice"><span class="cur">US$</span>9.99</div>
-        <div class="pterm">7 days</div>
-        <p class="pdesc">For a busy week.</p>
+      <!-- Each pass card turns over to show how to buy (CSS .flip) -->
+      <article class="flip reveal">
+        <div class="flip-inner">
+          <div class="plan front">
+            <h3 class="pname">7-day pass</h3>
+            <div class="pprice"><span class="cur">US$</span>9.99</div>
+            <div class="pterm">7 days</div>
+            <p class="pdesc">For a busy week.</p>
+            <button type="button" class="info" aria-expanded="false" aria-controls="buy-7" aria-label="How to buy the 7-day pass" title="How to buy">i</button>
+          </div>
+          <div class="plan back" id="buy-7" role="group" aria-label="How to buy the 7-day pass" tabindex="-1" inert aria-hidden="true">
+            <button type="button" class="back-link"><span aria-hidden="true">←</span> Back</button>
+            <h4 class="pname">How to buy</h4>
+            <ol class="buy-steps">
+              <li>Add the free extension to Chrome.</li>
+              <li>Open AtoZ and press <strong>Start</strong>: 14&nbsp;days&nbsp;free.</li>
+              <li>In the extension, press <strong>Get a pass</strong>; the pass is linked to your AtoZ account.</li>
+            </ol>
+            <a class="pbtn" href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener">Add to Chrome →</a>
+          </div>
+        </div>
       </article>
-      <article class="plan pop reveal">
-        <span class="flag">Recommended</span>
-        <h3 class="pname">30-day pass</h3>
-        <div class="pprice"><span class="cur">US$</span>19.99</div>
-        <div class="pterm">30 days</div>
-        <p class="pdesc">For regular extra hours.</p>
-        <span class="psave">Save 53% vs 7-day</span>
+      <article class="flip reveal">
+        <div class="flip-inner">
+          <div class="plan pop front">
+            <span class="flag">Recommended</span>
+            <h3 class="pname">30-day pass</h3>
+            <div class="pprice"><span class="cur">US$</span>19.99</div>
+            <div class="pterm">30 days</div>
+            <p class="pdesc">For regular extra hours.</p>
+            <span class="psave">Save 53% vs 7-day</span>
+            <button type="button" class="info" aria-expanded="false" aria-controls="buy-30" aria-label="How to buy the 30-day pass" title="How to buy">i</button>
+          </div>
+          <div class="plan pop back" id="buy-30" role="group" aria-label="How to buy the 30-day pass" tabindex="-1" inert aria-hidden="true">
+            <button type="button" class="back-link"><span aria-hidden="true">←</span> Back</button>
+            <h4 class="pname">How to buy</h4>
+            <ol class="buy-steps">
+              <li>Add the free extension to Chrome.</li>
+              <li>Open AtoZ and press <strong>Start</strong>: 14&nbsp;days&nbsp;free.</li>
+              <li>In the extension, press <strong>Get a pass</strong>; the pass is linked to your AtoZ account.</li>
+            </ol>
+            <a class="pbtn" href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener">Add to Chrome →</a>
+          </div>
+        </div>
       </article>
-      <article class="plan reveal">
-        <h3 class="pname">90-day pass</h3>
-        <div class="pprice"><span class="cur">US$</span>39.99</div>
-        <div class="pterm">90 days</div>
-        <p class="pdesc">Best value.</p>
-        <span class="psave">Save 33% vs 30-day</span>
+      <article class="flip reveal">
+        <div class="flip-inner">
+          <div class="plan front">
+            <h3 class="pname">90-day pass</h3>
+            <div class="pprice"><span class="cur">US$</span>39.99</div>
+            <div class="pterm">90 days</div>
+            <p class="pdesc">Best value.</p>
+            <span class="psave">Save 33% vs 30-day</span>
+            <button type="button" class="info" aria-expanded="false" aria-controls="buy-90" aria-label="How to buy the 90-day pass" title="How to buy">i</button>
+          </div>
+          <div class="plan back" id="buy-90" role="group" aria-label="How to buy the 90-day pass" tabindex="-1" inert aria-hidden="true">
+            <button type="button" class="back-link"><span aria-hidden="true">←</span> Back</button>
+            <h4 class="pname">How to buy</h4>
+            <ol class="buy-steps">
+              <li>Add the free extension to Chrome.</li>
+              <li>Open AtoZ and press <strong>Start</strong>: 14&nbsp;days&nbsp;free.</li>
+              <li>In the extension, press <strong>Get a pass</strong>; the pass is linked to your AtoZ account.</li>
+            </ol>
+            <a class="pbtn" href="https://chromewebstore.google.com/detail/atoz-shift-helper/fjajhooelifadiolkgpkafboghbdelad" target="_blank" rel="noopener">Add to Chrome →</a>
+          </div>
+        </div>
       </article>
     </div>
-    <p class="plan-note reveal">Every pass includes every feature.</p>
+    <p class="plan-note reveal">Every pass includes every feature. Tap a pass to see how to buy it.</p>
 
     <ol class="journey reveal" aria-label="How passes work">
       <li><span class="jn">1</span><strong>Install</strong><span class="jt">Add it to Chrome</span></li>
@@ -970,6 +1073,40 @@
     card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
     card.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }));
+
+  // Pass cards turn over to show how to buy (CSS .flip). One is open at a
+  // time; it turns back on a second click, ← Back, Esc, a click elsewhere,
+  // opening another card, or once it has scrolled out of view. The hidden
+  // face is inert. Opened from the keyboard, focus moves to the back; opened
+  // with a mouse or finger it doesn't, as Chrome would then draw a focus ring
+  // round the card.
+  let openFlip = null;
+  function setFlip(card, open, moveFocus) {
+    if (open && openFlip && openFlip !== card) setFlip(openFlip, false);
+    const front = card.querySelector('.front'), back = card.querySelector('.back'), info = card.querySelector('.info');
+    const hadFocus = card.contains(document.activeElement);
+    const [shown, hidden] = open ? [back, front] : [front, back];
+    card.classList.toggle('flipped', open);
+    info.setAttribute('aria-expanded', open);
+    shown.inert = false; shown.removeAttribute('aria-hidden');
+    hidden.inert = true; hidden.setAttribute('aria-hidden', 'true');
+    if (open && moveFocus) back.focus({ preventScroll: true });
+    else if (!open && hadFocus) info.focus({ preventScroll: true });
+    openFlip = open ? card : openFlip === card ? null : openFlip;
+  }
+  const flipWatch = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting && e.target === openFlip) setFlip(e.target, false);
+  }));
+  document.querySelectorAll('.flip').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;               // Add to Chrome opens the store; the card stays as it is
+      if (e.detail && String(getSelection())) return;  // selecting text isn't a click on the card
+      setFlip(card, !card.classList.contains('flipped'), e.detail === 0);
+    });
+    flipWatch.observe(card);
+  });
+  document.addEventListener('click', (e) => { if (openFlip && !openFlip.contains(e.target)) setFlip(openFlip, false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openFlip) setFlip(openFlip, false); });
 
   // Setup video: click to play. Nothing loads from YouTube until a button
   // with data-play is pressed; then YouTube's privacy-enhanced player replaces
