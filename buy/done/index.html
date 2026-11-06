@@ -96,6 +96,13 @@
         `<p class="small" style="margin-top:14px">Nothing else to do. It switches on by itself, even mid-run.</p>`);
     } else if (s && s.status === "unpaid") {
       show("bad", "The payment didn't go through", "No pass was bought and you haven't been charged. You can try again from the extension.");
+    } else if (s && s.status === "cancelled") {
+      // Disputed (even during the payment), refunded or cancelled: say so plainly.
+      const why = {
+        disputed: "Your card's bank disputed this payment, so it didn't become a pass.",
+        refunded: "This payment was refunded, so it didn't become a pass."
+      }[s.why] || "This pass was cancelled.";
+      show("bad", "No pass from this payment", `${why} Passes you already have keep working. If you think it's a mistake, email us and we'll sort it out.`);
     } else if (attempt < 30) {
       // Stripe tells our server a moment after it tells you; check again.
       setTimeout(() => check(attempt + 1), 2000);
