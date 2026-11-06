@@ -97,6 +97,10 @@
     .state { max-width: 560px; margin: 40px auto 0; text-align: center; padding: 30px 26px; border-radius: 20px;
              background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
     .state h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .state.hold { background: rgba(245,158,11,0.07); border-color: rgba(251,191,36,0.42); }
+    .state.hold h2 { color: #FDE68A; }
+    .state .icon { width: 46px; height: 46px; margin: 0 auto 14px; border-radius: 14px; display: grid; place-items: center;
+                   color: #FBBF24; background: rgba(245,158,11,0.14); border: 1px solid rgba(251,191,36,0.35); }
     .state p { color: var(--soft); font-size: 15px; }
     .state .btnrow { margin-top: 18px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
     .state .btnrow a, .state .btnrow button { padding: 11px 18px; border-radius: 10px; font: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer;
@@ -151,8 +155,11 @@
   // Stripe rounds a percent-off coupon's discount to the nearest cent.
   const discounted = (cents, pct) => cents - Math.round(cents * pct / 100);
 
-  function state(title, text, actions = "") {
-    $("body").innerHTML = `<div class="state"><h2>${title}</h2><p>${text}</p>${actions ? `<div class="btnrow">${actions}</div>` : ""}</div>`;
+  // tone "hold": amber with a lock, for an account that can't buy right now.
+  // Amber, not red: it needs attention, but it isn't an error, and support can lift it.
+  const LOCK = `<div class="icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>`;
+  function state(title, text, actions = "", tone = "") {
+    $("body").innerHTML = `<div class="state${tone ? " " + tone : ""}">${tone === "hold" ? LOCK : ""}<h2>${title}</h2><p>${text}</p>${actions ? `<div class="btnrow">${actions}</div>` : ""}</div>`;
   }
 
   async function load() {
@@ -183,7 +190,7 @@
     if (o.blocked) {
       state("This account can't buy a pass right now",
         "That usually follows a disputed payment, or several refunds. Passes you already have keep working. If you think it's a mistake, email us and we'll sort it out.",
-        `<a href="mailto:support@qwicktry.com?subject=${encodeURIComponent("Pass purchase — account " + CODE)}">Email support</a>`);
+        `<a href="mailto:support@qwicktry.com?subject=${encodeURIComponent("Pass purchase — account " + CODE)}">Email support</a>`, "hold");
       return;
     }
 
