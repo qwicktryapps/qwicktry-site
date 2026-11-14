@@ -150,7 +150,7 @@
 <header class="doc-hero">
   <h1>Privacy Policy</h1>
   <p>Privacy should be simple and honest. This explains exactly what we collect, what we don't, and how your data stays yours.</p>
-  <span class="updated">Last updated: November 5, 2026</span>
+  <span class="updated">Last updated: November 14, 2026</span>
 </header>
 
 <div class="container">
@@ -158,11 +158,12 @@
   <div class="summary">
     <h2>Privacy at a glance</h2>
     <div class="summary-grid">
-      <div class="summary-item good">Your shift data stays on your device — we never see it</div>
+      <div class="summary-item good">Which VET or VTO you get stays on your device — we never see it</div>
       <div class="summary-item good">Your Employee ID is never stored by us or sent to our servers</div>
       <div class="summary-item good">We store one code made from your AtoZ account, only to run your trial and pass</div>
       <div class="summary-item good">Payments are handled by Stripe. We never see your card number</div>
-      <div class="summary-item good">We do not sell or share your data</div>
+      <div class="summary-item good">Phone alerts are optional. Turn them on and we keep your Telegram chat ID, only to message you</div>
+        <div class="summary-item good">We do not sell or share your data</div>
       <div class="summary-item good">We do not use tracking cookies or analytics</div>
       <div class="summary-item bad">We do not collect your browsing history</div>
       <div class="summary-item bad">We do not read your Amazon credentials</div>
@@ -187,7 +188,7 @@
     <p>AtoZ Shift Helper is designed to collect the absolute minimum. Almost everything stays on your device.</p>
 
     <h3>2.1 Stored Locally on Your Device Only</h3>
-    <p>The following data is saved to Chrome's local extension storage on your device. It <strong>never leaves your device</strong> and is never transmitted to us or any third party.</p>
+    <p>The following data is saved to Chrome's local extension storage on your device. Except where the table says otherwise, it <strong>never leaves your device</strong> and is never transmitted to us or any third party.</p>
     <table>
       <thead><tr><th>Data</th><th>Purpose</th><th>Sent to us?</th></tr></thead>
       <tbody>
@@ -196,6 +197,8 @@
         <tr><td>Activity log</td><td>Local record of the shifts (VET) and time off (VTO) it tried to claim for you</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Department names</td><td>Found on your AtoZ pages, to build the Departments list you pick from</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Your pass (licence) key</td><td>Checked on your own device to unlock the extension after your free trial</td><td><span class="tag no">Never</span></td></tr>
+        <tr><td>Instructions for talking to AtoZ (signed by our server)</td><td>So the extension knows how to ask AtoZ for VET and VTO, and starts quickly</td><td><span class="tag no">Never</span></td></tr>
+        <tr><td>Your phone alerts token (only if you turn alerts on)</td><td>Proves to our server that your alerts come from your extension</td><td><span class="tag min">With each alert; we keep only a scrambled copy (a hash)</span></td></tr>
         <tr><td>Your trial end date</td><td>A copy kept so the popup can show when your trial ends</td><td><span class="tag no">Never</span></td></tr>
         <tr><td>Your answer to the review question (version 3.4.5 and later)</td><td>So it only asks once or twice, then stops</td><td><span class="tag no">Never</span></td></tr>
       </tbody>
@@ -212,22 +215,26 @@
         <tr><td>Department names on your own schedule</td><td>When you open the extension on the Find Shifts page, it asks AtoZ for the department names on your schedule, to complete your Departments list. Nothing else from your schedule is used or stored.</td><td><span class="tag no">Never</span></td></tr>
       </tbody>
     </table>
+    <p>The instructions for these requests (which AtoZ addresses to use and how to read AtoZ's answers) come from our server, as described in section 2.3. They contain nothing about you, and nothing AtoZ sends back is passed to us.</p>
+
     <div class="box amber">
       <strong>Note about Amazon's servers</strong>
       The extension communicates with atoz.amazon.work and atoz-apps.amazon.work — Amazon's own systems. This is the same connection your browser makes when you use AtoZ normally. Qwicktry has no access to this communication and receives none of this data. Amazon's own Privacy Policy applies to your use of their platform.
     </div>
 
     <h3>2.3 Our Servers</h3>
-    <p>The extension contacts one server of ours, and only for licensing — never for shift data.</p>
+    <p>The extension contacts one server of ours: for licensing, for the instructions it uses to talk to AtoZ, and, only if you turn them on, for phone alerts (section 2.8). Never for VET or VTO data.</p>
     <table>
       <thead><tr><th>Data</th><th>Purpose</th><th>Stored by us?</th></tr></thead>
       <tbody>
         <tr><td>Your request code</td><td>Starts and checks your free trial, and identifies which pass is yours</td><td><span class="tag min">Yes</span></td></tr>
         <tr><td>The date your free trial started</td><td>So your trial lasts the same length no matter which computer you use</td><td><span class="tag min">Yes</span></td></tr>
+        <tr><td>Error reports: your request code, which kind of request AtoZ refused (for example "claim VET") and how it refused</td><td>So we see quickly when AtoZ changes, and fix the instructions for everyone. Never which VET or VTO, or anything AtoZ sent</td><td><span class="tag min">Yes, for 30 minutes</span></td></tr>
         <tr><td>Your pass details (which pass, its end date, and the pass key we issued)</td><td>So a pass you buy can switch on by itself, and be sent again if you need it</td><td><span class="tag min">Yes</span></td></tr>
       </tbody>
     </table>
-    <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it only after you've first pressed Start: when you press Start, when it shows your current trial and passes (as your AtoZ page opens, when you return to it, or when you open the extension; at most once a minute), for a few minutes after you choose Get a pass, and when your trial or pass ends.</p>
+    <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it only after you've first pressed Start: when you press Start, when it shows your current trial and passes (as your AtoZ page opens, when you return to it, or when you open the extension; at most once a minute), for a few minutes after you choose Get a pass, when your trial or pass ends, when it fetches newer instructions for talking to AtoZ, when AtoZ refuses one of its requests (above), and, with phone alerts on, as section 2.8 describes.</p>
+    <p>While it runs, the extension also asks our server about every 15 minutes whether newer instructions exist, and whether it should check AtoZ more slowly. That check sends nothing about you.</p>
     <p>Our licensing server runs on Cloudflare. As with any website, Cloudflare sees your IP address when the extension connects; our licensing records don't include it.</p>
     <div class="box green">
       <strong>Once you have a pass, it's checked on your own device</strong>
@@ -235,7 +242,7 @@
     </div>
     <div class="box blue">
       <strong>What we never receive</strong>
-      Your Employee ID, your schedule, which shifts you claimed, your filter settings, your card number, or anything about other websites you visit. None of it is sent to us — during your trial or afterwards. If you buy a pass, we receive only the purchase details listed in section 2.7.
+      Your Employee ID, your schedule, which VET or VTO you claimed (with phone alerts on, only how many: see section 2.8), your filter settings, your card number, or anything about other websites you visit. None of it is sent to us — during your trial or afterwards. If you buy a pass, we receive only the purchase details listed in section 2.7.
     </div>
 
     <h3>2.4 This Website</h3>
@@ -262,6 +269,20 @@
     </table>
     <p>We use your email address only for your purchase: refunds, delivery problems and questions about your pass. If you ask us to, we also send a reminder shortly before your pass ends, and every reminder has a one-click unsubscribe link. We never use your email for advertising and never sell it.</p>
     <p>We also keep a record of refunds and disputed payments against your request code. We use it only to prevent refund abuse, as described in our Terms (section 3.9).</p>
+  
+    <h3>2.8 Phone Alerts (optional: off until you turn them on)</h3>
+    <p>Phone alerts send you a Telegram message when the extension claims VET or accepts VTO for you, when it stops checking (for example, your laptop went to sleep or the AtoZ tab was closed), when its checks keep failing, and when a run ends (for example, your trial ended). They stay off until you turn them on in the extension and confirm in Telegram.</p>
+    <table>
+      <thead><tr><th>Data</th><th>Purpose</th><th>Stored by us?</th></tr></thead>
+      <tbody>
+        <tr><td>Your request code, linked to your Telegram chat ID (Telegram's number for your chat with our bot)</td><td>To know where to send your alerts</td><td><span class="tag min">Until you turn alerts off, or 12 months after you last used them</span></td></tr>
+        <tr><td>Your alert choices (which messages you want)</td><td>To send only those</td><td><span class="tag min">Yes, with the link</span></td></tr>
+        <tr><td>Check-ins while it runs: the time of the last one, and whether a run is going (about every 5 minutes)</td><td>To tell you when it stops checking</td><td><span class="tag min">Yes, for 30 days</span></td></tr>
+        <tr><td>What happened: how many VET claims or VTOs, whether it was VET or VTO, why a run ended, that checks are failing or working again</td><td>The text of your message</td><td><span class="tag no">No: passed on to Telegram as your message</span></td></tr>
+      </tbody>
+    </table>
+    <p>Messages never include which VET or VTO, its date or time, your department, your Employee ID or your name. Telegram delivers them, so Telegram's privacy policy applies to your use of Telegram. When you message our bot, Telegram passes us your chat ID and what you sent; we use only the chat ID and your command (such as /start, /stop or /status), and we don't keep your Telegram name or username.</p>
+    <p>To turn alerts off, press Turn off in the extension, or send /stop to the bot. Your link and check-in records are deleted straight away.</p>
   </section>
 
   <section id="how-we-use">
@@ -291,10 +312,10 @@
   <section id="sharing">
     <h2><span class="num">5</span> Do We Share Your Information?</h2>
     <p><strong>We do not sell your personal information. We do not share your personal information with advertisers, data brokers, or marketing companies.</strong></p>
-    <p>Apart from the licensing records in section 2.3, the extension sends nothing to Qwicktry, so there is very little we could share. Our licensing server is hosted by Cloudflare, which handles those requests on our behalf. If you buy a pass, Stripe and Link process the payment as described in section 2.7. Otherwise, the only third-party communication is between the extension and Amazon's own AtoZ platform — the same platform you use directly as an employee.</p>
+    <p>Apart from what section 2.3 and, if you turn them on, section 2.8 describe, the extension sends nothing to Qwicktry, so there is very little we could share. Our licensing server is hosted by Cloudflare, which handles those requests on our behalf. If you buy a pass, Stripe and Link process the payment as described in section 2.7. If you turn on phone alerts, we give Telegram your chat ID and the message, so it can deliver it. Otherwise, the only third-party communication is between the extension and Amazon's own AtoZ platform — the same platform you use directly as an employee.</p>
     <div class="box blue">
       <strong>Legal disclosure</strong>
-      We may disclose information if required by law, court order, or governmental authority, or if we believe in good faith that such disclosure is necessary to protect our rights, investigate fraud, or respond to a government request. In practice, this would apply only to our licensing records, and any support emails or feedback form answers you have sent us.
+      We may disclose information if required by law, court order, or governmental authority, or if we believe in good faith that such disclosure is necessary to protect our rights, investigate fraud, or respond to a government request. In practice, this would apply only to our licensing and phone alert records, and any support emails or feedback form answers you have sent us.
     </div>
   </section>
 
@@ -337,6 +358,8 @@
     <ul>
       <li><strong>Extension data (local):</strong> Stored on your device only — retained until you clear it or uninstall the extension. Entirely under your control.</li>
       <li><strong>Licensing records:</strong> Your request code, the date your trial started and your pass details, retained while your pass is active and for up to 12 months afterwards.</li>
+      <li><strong>Phone alerts:</strong> The link to your Telegram chat, until you turn alerts off (or 12 months after you last used them); check-ins for 30 days.</li>
+      <li><strong>Error reports:</strong> 30 minutes.</li>
       <li><strong>Pass purchase records:</strong> Kept for as long as Canadian tax law requires us to keep business records (generally six years), then deleted.</li>
       <li><strong>Support emails:</strong> Retained for up to 2 years or until you request deletion</li>
       <li><strong>Uninstall feedback answers:</strong> Retained for up to 2 years</li>
@@ -353,6 +376,7 @@
   <section id="third-party">
     <h2><span class="num">10</span> Third-Party Services and Links</h2>
     <p>Our extension operates on the Amazon AtoZ website. We are not affiliated with, endorsed by, or in any way officially connected with Amazon.com, Inc. or any of its subsidiaries. Amazon's own privacy policy applies to your use of their platform independently of our extension.</p>
+    <p>If you turn on phone alerts, the messages are delivered by Telegram (telegram.org). Telegram's own privacy policy applies to your use of Telegram.</p>
     <p>Our website or extension may contain links to third-party websites. We are not responsible for the privacy practices of those websites and encourage you to review their individual privacy policies.</p>
   </section>
 
