@@ -23,7 +23,7 @@
   {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    "name": "Stop Refreshing AtoZ: Auto-Grab VET & VTO (Free Chrome Extension)",
+    "name": "Stop Refreshing AtoZ: Auto-Grab VET & VTO (Chrome Extension)",
     "description": "VET and VTO on AtoZ are gone in seconds. A full walkthrough of AtoZ Shift Helper, a Chrome extension (free to try) that watches AtoZ and grabs only the VET, READY shifts and VTO that fit your schedule: install, set your filters, press Start.",
     "thumbnailUrl": ["https://qwicktry.com/media/setup-video.jpg"],
     "uploadDate": "2026-10-29T06:50:45-07:00",
@@ -333,19 +333,6 @@
     .tg.no { background: #FEE2E2; color: #DC2626; }
     .demo-note { font-size: 13.5px; color: var(--muted); font-style: italic; margin-top: 16px; text-align: center; }
 
-    /* ─────────────── ANNOUNCEMENT ─────────────── */
-    /* LAUNCH: delete this block (and the bar in the body) once 3.5 is live. */
-    .announce {
-      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px;
-      padding: 10px 16px; text-align: center; font-size: 14px; line-height: 1.45;
-      background: linear-gradient(90deg, #1E1B4B, #3B1D78 50%, #1E1B4B); color: rgba(255,255,255,0.86);
-    }
-    .announce strong { color: #fff; }
-    .announce a { color: #C4B5FD; font-weight: 700; text-decoration: none; white-space: nowrap; }
-    .announce a:hover { color: #fff; }
-    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 4px rgba(52,211,153,0.22); flex-shrink: 0; }
-    .announce .live-dot { display: inline-block; vertical-align: 1px; margin-right: 10px; }
-
     /* ─────────────── PRICING ─────────────── */
     /* Dark, like the stat strip and the CTA. Price, currency, delivery and the
        refund rule are all on screen before anyone pays (Stripe's checklist). */
@@ -358,12 +345,6 @@
     }
     .pricing .h2 { color: #fff; }
     .pricing .sub { color: rgba(255,255,255,0.68); }
-    .now-free {
-      display: flex; align-items: center; gap: 9px; width: fit-content; margin: 0 auto 18px;
-      font-size: 13.5px; font-weight: 700; color: #D1FAE5;
-      background: rgba(16,185,129,0.12); border: 1px solid rgba(52,211,153,0.3); padding: 7px 15px; border-radius: 999px;
-    }
-
     .plans { max-width: var(--maxw); margin: 52px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
     .plan {
       --mx: 50%; --my: 0%;
@@ -596,7 +577,6 @@
       .shift-dur { display: none; }
       .foot-top { flex-direction: column; }
       .plans { grid-template-columns: 1fr; max-width: 420px; }
-      .now-free { font-size: 12.5px; text-align: center; }
       .journey { grid-template-columns: 1fr; max-width: 380px; gap: 22px; }
       .journey::before { top: 20px; bottom: 20px; left: 19px; right: auto; width: 2px; height: auto;
         background: linear-gradient(180deg, #A78BFA, #34D399 33%, #A78BFA 66%, #6366F1); }
@@ -607,11 +587,6 @@
 </head>
 <body>
 
-<!-- LAUNCH: remove this bar once 3.5 is live -->
-<div class="announce" role="note">
-  <span><span class="live-dot" aria-hidden="true"></span><strong>Free right now.</strong> When passes arrive in version 3.5, you still get 14 days free, no card needed.</span>
-  <a href="#pricing">See pricing →</a>
-</div>
 
 <!-- ─────────────── NAV ─────────────── -->
 <nav>
@@ -649,7 +624,7 @@
 
     <!-- The setup video. Click to play — see .hero-video in the CSS. -->
     <div class="hero-video" id="watch">
-      <div class="video-frame" data-video="7eRU4f4l62Y" data-title="Stop Refreshing AtoZ: Auto-Grab VET &amp; VTO (Free Chrome Extension)">
+      <div class="video-frame" data-video="7eRU4f4l62Y" data-title="Stop Refreshing AtoZ: Auto-Grab VET &amp; VTO (Chrome Extension)">
         <button type="button" class="video-poster" data-play="0" aria-label="Play the setup video (2 minutes 52 seconds)">
           <img src="/media/setup-video.jpg" width="1280" height="720"
                alt="AtoZ Shift Helper running on the AtoZ Find Shifts page: Auto-grab VET and VTO" />
@@ -847,8 +822,6 @@
 <!-- ─────────────── PRICING ─────────────── -->
 <section class="block pricing" id="pricing">
   <div class="container">
-    <!-- LAUNCH: remove this pill once 3.5 is live -->
-    <p class="now-free reveal"><span class="live-dot" aria-hidden="true"></span> Free right now · Passes begin with version 3.5</p>
     <h2 class="h2 reveal">Start free. No card needed.</h2>
     <p class="sub reveal">Use every feature free for 14 days, then pick a pass. One-time payment, never renews.</p>
 
@@ -975,8 +948,7 @@
       </details>
       <details class="faq-item reveal">
         <summary>How much does it cost? <span class="plus">+</span></summary>
-        <!-- LAUNCH: drop "It's free right now. From version 3.5," once 3.5 is live -->
-        <div class="ans">It's free right now. From version 3.5, you get 14 days free with no card needed. After that, a pass costs <strong>US$9.99 for 7 days</strong>, <strong>US$19.99 for 30 days</strong> or <strong>US$39.99 for 90 days</strong>, plus tax where it applies.</div>
+        <div class="ans">You get 14 days free with no card needed. After that, a pass costs <strong>US$9.99 for 7 days</strong>, <strong>US$19.99 for 30 days</strong> or <strong>US$39.99 for 90 days</strong>, plus tax where it applies.</div>
       </details>
       <details class="faq-item reveal">
         <summary>Is it a subscription? <span class="plus">+</span></summary>

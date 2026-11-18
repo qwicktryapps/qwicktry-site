@@ -51,6 +51,11 @@
     .flag { position: absolute; top: 0; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 10.5px; font-weight: 800;
             letter-spacing: .9px; text-transform: uppercase; color: #fff; background: linear-gradient(135deg, #7C3AED, #5B4FCF);
             padding: 4px 12px 5px; border-radius: 0 0 10px 10px; }
+    /* Founding offer: a ribbon across the card's top-right corner (the card clips it).
+       Shown only when this account has the offer, like the crossed-out price. */
+    .stamp { position: absolute; top: 18px; right: -34px; transform: rotate(45deg); width: 130px; text-align: center;
+             font-size: 11px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: #052E1F; background: #6EE7B7;
+             padding: 4px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
     .pname { font-size: 13px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C4B5FD; }
     .price { margin-top: 14px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .price .now { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; font-variant-numeric: tabular-nums; }
@@ -209,6 +214,7 @@
       return `<article class="plan${p.id === "30d" ? " pop" : ""}">
         ${p.id === "30d" ? '<span class="flag">Recommended</span>' : ""}
         <h3 class="pname">${esc(name)}</h3>
+        ${pct ? `<span class="stamp">${pct}% off</span>` : ""}
         <div class="price"><span class="cur">${curLabel(p.currency)}</span><span class="now">${money(now)}</span>${pct ? `<span class="was">${money(p.amount)}</span>` : ""}</div>
         <div class="term">${p.days} days</div>
         <p class="desc">${esc(desc)}</p>
