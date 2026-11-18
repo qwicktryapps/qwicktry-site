@@ -89,13 +89,23 @@
     }
 
     /* ─────────────── NAV ─────────────── */
+    /* At the top of the page the nav is see-through (.top, in the HTML, so it
+       never flashes), so the hero's colour runs up behind it; once you scroll,
+       the script removes .top and it turns to frosted white. A thin brand line
+       sits along its top edge. */
     nav {
       position: sticky; top: 0; z-index: 200;
       background: rgba(255,255,255,0.8);
       backdrop-filter: saturate(180%) blur(14px);
       -webkit-backdrop-filter: saturate(180%) blur(14px);
       border-bottom: 1px solid rgba(231,234,240,0.9);
+      transition: background-color .3s ease, border-color .3s ease;
     }
+    nav::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--violet) 45%, var(--indigo) 75%, var(--yellow));
+    }
+    nav.top { background: transparent; border-bottom-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
     .nav-inner {
       max-width: var(--maxw); margin: 0 auto; padding: 0 24px;
       height: 66px; display: flex; align-items: center; justify-content: space-between;
@@ -128,23 +138,42 @@
     .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(91,79,207,0.42); }
 
     /* ─────────────── HERO ─────────────── */
+    /* The hero starts under the nav (pulled up by the nav's 67 px: 66 + its 1 px border) so its
+       colour fills the top of the page. Soft brand glows (violet, indigo, a
+       little ⚡ yellow behind the video) drift very slowly (off for people who
+       ask for less motion), over a grid that fades out, and the whole thing
+       fades into the next section's grey. */
     .hero {
       position: relative; isolation: isolate;
-      padding: 96px 0 90px;
-      background:
-        radial-gradient(900px 500px at 12% -10%, rgba(139,92,246,0.16), transparent 60%),
-        radial-gradient(800px 520px at 95% 0%, rgba(99,102,241,0.14), transparent 55%),
-        linear-gradient(180deg, #FBFBFE 0%, #F4F3FD 100%);
+      margin-top: -67px;
+      padding: calc(96px + 67px) 0 96px;
+      background: linear-gradient(180deg, #F5F2FF 0%, #F3F1FD 60%, var(--bg) 100%);
       overflow: hidden;
     }
+    .hero::before {
+      content: ""; position: absolute; inset: -8%; z-index: -2;
+      background:
+        radial-gradient(760px 520px at 10% 4%, rgba(139,92,246,0.26), transparent 62%),
+        radial-gradient(720px 520px at 96% 8%, rgba(99,102,241,0.22), transparent 58%),
+        radial-gradient(520px 380px at 78% 58%, rgba(250,204,21,0.14), transparent 66%),
+        radial-gradient(700px 420px at 38% 100%, rgba(167,139,250,0.18), transparent 70%);
+      animation: hero-drift 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes hero-drift {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      50%  { transform: translate3d(3%, -2%, 0) scale(1.04); }
+      100% { transform: translate3d(-3%, 2%, 0) scale(1.02); }
+    }
+    @media (prefers-reduced-motion: reduce) { .hero::before { animation: none; } }
     .hero::after {
       content: ""; position: absolute; inset: 0; z-index: -1;
       background-image:
-        linear-gradient(rgba(91,79,207,0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(91,79,207,0.045) 1px, transparent 1px);
-      background-size: 46px 46px;
-      mask-image: radial-gradient(700px 500px at 50% 20%, #000 30%, transparent 75%);
-      -webkit-mask-image: radial-gradient(700px 500px at 50% 20%, #000 30%, transparent 75%);
+        linear-gradient(rgba(91,79,207,0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,79,207,0.075) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(900px 560px at 50% 18%, #000 25%, transparent 78%);
+      -webkit-mask-image: radial-gradient(900px 560px at 50% 18%, #000 25%, transparent 78%);
     }
     .hero-grid {
       max-width: var(--maxw); margin: 0 auto; padding: 0 24px;
@@ -201,6 +230,12 @@
        site sets no cookies and runs no third-party scripts (privacy policy
        §2.4, §6). Play swaps in YouTube's privacy-enhanced player. */
     .hero-video { position: relative; }
+    /* A soft violet-to-yellow halo behind the video, so it sits in light. */
+    .hero-video::before {
+      content: ""; position: absolute; z-index: -1; left: -6%; right: -6%; top: -10%; height: 78%;
+      background: radial-gradient(closest-side, rgba(139,92,246,0.40), rgba(250,204,21,0.16) 68%, transparent);
+      filter: blur(22px); pointer-events: none;
+    }
     .video-frame {
       position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden;
       background: var(--dark); box-shadow: var(--shadow-lg), 0 0 0 1px rgba(15,23,42,0.06);
@@ -572,7 +607,7 @@
       .nav-links a:not(.nav-cta) { display: none; }
       section.block { padding: 72px 0; }
       .feat-grid { grid-template-columns: 1fr; }
-      .hero { padding: 64px 0 72px; }
+      .hero { padding: calc(64px + 67px) 0 72px; }
       .shift-time { min-width: 0; font-size: 13px; }
       .shift-dur { display: none; }
       .foot-top { flex-direction: column; }
@@ -589,7 +624,7 @@
 
 
 <!-- ─────────────── NAV ─────────────── -->
-<nav>
+<nav class="top">
   <div class="nav-inner">
     <a href="/" class="nav-logo"><span class="mark">⚡</span> AtoZ <span class="q">Shift Helper</span></a>
     <div class="nav-links">
@@ -1026,13 +1061,19 @@
       </div>
     </div>
     <div class="foot-legal">
-      <p class="disc">AtoZ Shift Helper is made by <strong>QWICKTRY</strong>, a business registered in Ontario, Canada. Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies. Qwicktry accepts no liability for any consequences arising from the use of this software.</p>
-      <p class="copy">© 2026 QWICKTRY · Toronto, Ontario, Canada · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
+      <p class="disc">AtoZ Shift Helper is made by <strong>QWICKTRY</strong>, based in Ontario, Canada. Qwicktry and AtoZ Shift Helper are independent and are <strong>not affiliated with, endorsed by, sponsored by, or in any way officially connected with</strong> Amazon.com, Inc. or any of its subsidiaries or affiliates. "Amazon," "AtoZ," and related names and marks are the property of their respective owners. AtoZ Shift Helper is an independent tool provided as-is, and use of it is at your own risk. You are solely responsible for ensuring your use complies with your employer's policies. Qwicktry accepts no liability for any consequences arising from the use of this software.</p>
+      <p class="copy">© 2026 QWICKTRY · Ontario, Canada · Contact: <span>support</span>&#64;<span>qwicktry.com</span></p>
     </div>
   </div>
 </footer>
 
 <script>
+  // Nav: see-through at the very top (over the hero), frosted once you scroll.
+  const navEl = document.querySelector('nav');
+  const navTop = () => navEl.classList.toggle('top', window.scrollY < 8);
+  navTop();
+  window.addEventListener('scroll', navTop, { passive: true });
+
   // Scroll reveal
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
