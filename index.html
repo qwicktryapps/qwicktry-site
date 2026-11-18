@@ -1159,8 +1159,10 @@
   }));
 
   // FAQ: one answer open at a time. Opening one closes the one before; both
-  // move smoothly (height, and the answer fades in), and the question you
-  // clicked stays where it is on screen while the one above folds away.
+  // move smoothly (height, and the answer fades in). Nothing scrolls the page:
+  // what's above an answer stays put while it folds, and the questions below
+  // glide up (the browser's own scroll anchoring steps in only when the
+  // folding answer is above the screen, so what you're looking at doesn't jump).
   // People who ask for less motion get the same, without the movement.
   // Without the script, the plain <details> still open and close.
   (() => {
@@ -1187,51 +1189,34 @@
       if (!still.matches) d.querySelector('.ans').animate(
         { opacity: [0, 1], transform: ['translateY(-6px)', 'none'] }, { duration: 340, delay: 40, easing: EASE, fill: 'backwards' });
     }
+    // An answer's folded height: the question + borders, to the fraction of a pixel.
+    const closedH = (d) => { const cs = getComputedStyle(d);
+      return d.querySelector('summary').getBoundingClientRect().height + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth); };
     function close(d) {
       const from = h(d);
       stop(d);
       d.classList.add('closing');
-      const sum = d.querySelector('summary');
-      const cs = getComputedStyle(d);   // the question + borders, to the fraction of a pixel
-      const to = sum.getBoundingClientRect().height + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
-      animate(d, from, to, () => { d.open = false; d.classList.remove('closing'); });
+      animate(d, from, closedH(d), () => { d.open = false; d.classList.remove('closing'); });
     }
-    // Keep the clicked question still while the page above it changes height.
-    // Each frame it works out where the page should be scrolled overall (the
-    // start, plus how far the question has moved down the page), so the
-    // browser's rounding of scroll positions can't add up. It steps aside the
-    // moment the visitor scrolls, swipes, presses a key or jumps elsewhere,
-    // and stops once the answers have finished moving (at most 1.5 s).
-    let anchorRun = 0;
-    function anchor(el) {
-      const run = ++anchorRun;
-      const pageTop = () => el.getBoundingClientRect().top + window.scrollY;
-      const top0 = pageTop(), y0 = window.scrollY, t0 = performance.now();
-      let left = y0, quiet = 0, off = false;
-      const leave = () => { off = true; };
-      const inputs = ['wheel', 'touchstart', 'keydown'];
-      inputs.forEach((n) => addEventListener(n, leave, { passive: true }));
-      const step = (t) => {
-        if (run !== anchorRun || Math.abs(window.scrollY - left) > 120) off = true;
-        if (!off) {
-          const want = y0 + (pageTop() - top0);
-          if (Math.abs(want - window.scrollY) >= 0.5) window.scrollTo({ top: want, behavior: 'instant' });
-          left = window.scrollY;
-        }
-        if (anims.size > 0) quiet = 0; else if (!quiet) quiet = t;
-        if (!off && (!quiet || t - quiet < 200) && t - t0 < 1500) requestAnimationFrame(step);
-        else inputs.forEach((n) => removeEventListener(n, leave));
-      };
-      requestAnimationFrame(step);
+    // When the answer folding away is above the clicked question and mostly
+    // off the top of the screen, the question would slide up under the
+    // header: scroll gently, at the same time, so it settles just below it.
+    // Otherwise (the usual case) nothing scrolls.
+    function keepInView(d, folding) {
+      const shift = folding.filter((o) => o.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING)
+        .reduce((s, o) => s + h(o) - closedH(o), 0);
+      const minTop = document.querySelector('nav').getBoundingClientRect().height + 16;
+      const end = d.querySelector('summary').getBoundingClientRect().top - shift;
+      if (end < minTop) window.scrollBy({ top: end - minTop, behavior: still.matches ? 'instant' : 'smooth' });
     }
-
     items.forEach((d) => {
       d.querySelector('summary').addEventListener('click', (e) => {
         e.preventDefault();
         const isOpen = d.open && !d.classList.contains('closing');
         if (isOpen) { close(d); return; }
-        anchor(d.querySelector('summary'));
-        items.forEach((o) => { if (o !== d && o.open && !o.classList.contains('closing')) close(o); });
+        const folding = items.filter((o) => o !== d && o.open && !o.classList.contains('closing'));
+        keepInView(d, folding);
+        folding.forEach(close);
         open(d);
       });
       // Opened another way (Chrome's find-in-page opens a matching answer):
