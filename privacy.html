@@ -167,7 +167,7 @@
       <div class="summary-item good">Payments are handled by Stripe. We never see your card number</div>
       <div class="summary-item good">Phone alerts are optional. Turn them on and we keep your Telegram chat ID, only to message you</div>
         <div class="summary-item good">We do not sell or share your data</div>
-      <div class="summary-item good">We do not use tracking cookies or analytics</div>
+      <div class="summary-item good">We do not use tracking cookies or analytics services; we only count users anonymously</div>
       <div class="summary-item bad">We do not collect your browsing history</div>
       <div class="summary-item bad">We do not read your Amazon credentials</div>
       <div class="summary-item bad">We do not access anything outside the AtoZ pages</div>
@@ -237,7 +237,8 @@
       </tbody>
     </table>
     <p>The request code is made from your AtoZ account using a one-way scramble (a hash). It doesn't contain your Employee ID or your name, and we keep no list of Employee IDs to compare it with. The code is also attached to your purchase, so your pass works on your account. The extension sends it only after you've first pressed Start: when you press Start, when it shows your current trial and passes (as your AtoZ page opens, when you return to it, or when you open the extension; at most once a minute), for a few minutes after you choose Get a pass, when your trial or pass ends, when it fetches newer instructions for talking to AtoZ, when AtoZ refuses one of its requests (above), and, with phone alerts on, as section 2.8 describes.</p>
-    <p>While it runs, the extension also asks our server about every 15 minutes whether newer instructions exist, and whether it should check AtoZ more slowly. That check sends nothing about you.</p>
+    <p>When it shows your current trial and passes, we also count you as one of that day's and that week's users. For that count we mix your request code with a random value that is thrown away when the day (or week) ends, and keep only the result, so the count can't be traced back to you or linked from one day to the next.</p>
+    <p>While it runs, the extension also asks our server about every 15 minutes whether newer instructions exist, and whether it should check AtoZ more slowly. That check sends nothing about you. We count how many of these checks arrive (only the number, never who sent them), to know how many copies are running.</p>
     <p>Our licensing server runs on Cloudflare. As with any website, Cloudflare sees your IP address when the extension connects; our licensing records don't include it.</p>
     <div class="box green">
       <strong>Once you have a pass, it's checked on your own device</strong>
@@ -296,8 +297,9 @@
       <li><strong>Purchase records:</strong> The details in section 2.7 — used to deliver your pass, answer questions about it, issue refunds and keep the records tax law requires</li>
       <li><strong>Support emails:</strong> Used solely to respond to your inquiry — never shared or used for any other purpose</li>
       <li><strong>Uninstall feedback (optional):</strong> Used only to understand why people remove the extension and to improve it</li>
+      <li><strong>Usage counts:</strong> How many copies are running and how many people use it each day and week, counted without anything that identifies you (section 2.3)</li>
     </ul>
-    <p>We do not use your information for marketing, advertising, profiling, analytics, or any purpose beyond responding to direct support requests.</p>
+    <p>We do not use your information for marketing, advertising, profiling, analytics, or any purpose beyond responding to direct support requests. The usage counts above identify no one.</p>
   </section>
 
   <section id="how-we-protect">
